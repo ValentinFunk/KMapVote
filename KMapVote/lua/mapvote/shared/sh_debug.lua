@@ -1,0 +1,1 @@
+LibK.addReloadFile( "autorun/mapvote_init.lua" )

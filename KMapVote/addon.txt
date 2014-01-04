@@ -1,0 +1,11 @@
+"AddonInfo"
+{
+	"name"				"KMapvote"
+	"version"			"2"
+	"up_date"			"00/00/00"
+	"author_name"			"Kamshak"
+	"author_email"			"contact.me@steam"
+	"author_url"			"http://steamcommunity.com/id/kamshak"
+	"info"				"Graphical Mapvote Script, you are not allowed to redistribute or resell without written permission by the author"
+	"override"			"0"
+}
