@@ -317,6 +317,32 @@ function STATES.GMVoteFinished:Think( )
 	end
 end
 
+local function isMapGoodForGamemode( map, gmTable )
+	--Check if map is valid for the upcoming gamemode
+	local isValidMap = false
+	local validMaps = string.Split( gmTable.maps, "|" )
+	if validMaps && gmTable.maps != "" then
+		for k, pattern in pairs( validMaps ) do
+			if string.find( string.lower( map.name ), pattern ) then
+				isValidMap = true
+				break
+			end
+		end
+	end
+		
+	
+	--Check for override
+	if map.gamemodes then
+		if table.HasValue( map.gamemodes, gmTable.name ) then
+			isValidMap = true
+		else
+			KLogf( 5, "Map %s has override %s, not adding it (gamemode is %s)", map.name, table.concat( map.gamemodes, ',' ), gmTable.name )
+			isValidMap = false --override override gm map pattern
+		end
+	end
+	
+	return isValidMap
+end
 
 STATES.Vote = {}
 function STATES.Vote:Init( )
@@ -362,29 +388,7 @@ function STATES.Vote:Init( )
 			continue --extension handled below
 		end
 		
-		--Check if map is valid for the upcoming gamemode
-		local isValidMap = false
-		local validMaps = string.Split( gmTable.maps, "|" )
-		if validMaps && gmTable.maps != "" then
-			for k, pattern in pairs( validMaps ) do
-				if string.find( string.lower( map.name ), pattern ) then
-					isValidMap = true
-					break
-				end
-			end
-		end
-			
-		
-		--Check for override
-		if map.gamemodes then
-			if table.HasValue( map.gamemodes, self.wonGm ) then
-				isValidMap = true
-			else
-				isValidMap = false --override override gm map pattern
-			end
-		end
-		
-		if not isValidMap then
+		if not isMapGoodForGamemode( map, gmTable ) then
 			continue
 		end
 		
@@ -396,7 +400,10 @@ function STATES.Vote:Init( )
 		table.insert( self.maps, map )
 	end
 	if MAPVOTE.AllowExtension then
-		table.insert( self.maps, {name=game.GetMap( )} )
+		local map = { name = game.GetMap( ) }
+		if isMapGoodForGamemode( map, gmTable ) then
+			table.insert( self.maps, map )
+		end
 	end
 	
 	if #mapErrors > 0 and MAPVOTE.CheckMaps then
@@ -430,6 +437,7 @@ function STATES.Vote:Init( )
 				
 				for k, mapTbl in pairs( self.maps ) do
 					if table.HasValue( mapsNotAllowed, mapTbl.name ) then
+						KLogf( 5, "Map %s has been played too recently, removing it! (gm is %s)", mapTbl.name, gmTable.name )
 						self.maps[k] = nil
 					end
 				end

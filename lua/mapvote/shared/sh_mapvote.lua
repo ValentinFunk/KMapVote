@@ -149,9 +149,6 @@ MAPVOTE.VoteTime = 30
 --Allow voting to keep the current map
 MAPVOTE.AllowExtension = true
 
---Allow closing the mapvote window(if skin supports it)
-MAPVOTE.AllowExit = true
-
 --Number of maps to display per vote
 --9 + Extension = 10
 MAPVOTE.MapsPerVote = 9

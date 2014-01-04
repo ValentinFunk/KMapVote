@@ -66,6 +66,12 @@ MAPSLOADED = true
 	}
 	
 	MAPVOTE:AddMap{
+		name = "gm_construct",
+		label = "Construct"
+	}
+	
+	
+	MAPVOTE:AddMap{
 		name = "ttt_alt_borders_b13",
 		label = "Alt Borders"
 	}

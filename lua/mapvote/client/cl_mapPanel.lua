@@ -226,7 +226,7 @@ function PANEL:SetMap( map )
 	end
 	
 	if map.name == game.GetMap( ) then
-		self.label:SetText( "Extend current map" )
+		self.label:SetText( "Extend map" )
 	else
 		self.label:SetText( map.label or map.name )
 	end
