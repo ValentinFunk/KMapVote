@@ -66,12 +66,12 @@ function PANEL:Init( )
 		Derma_Hook( self.adminOverride, "Paint", "Paint", "ForceButton" )
 	end
 	
-	local ratingsBar = vgui.Create( "DPanel", self.icon )
-	ratingsBar:Dock( TOP )
-	ratingsBar:SetTall( 25 )
-	Derma_Hook( ratingsBar, "Paint", "Paint", "RatingsBar" )
+	self.ratingsBar = vgui.Create( "DPanel", self.icon )
+	self.ratingsBar:Dock( TOP )
+	self.ratingsBar:SetTall( 25 )
+	Derma_Hook( self.ratingsBar, "Paint", "Paint", "RatingsBar" )
 	
-	self.ratingsLayout = vgui.Create( "DIconLayout", ratingsBar )
+	self.ratingsLayout = vgui.Create( "DIconLayout", self.ratingsBar )
 	self.ratingsLayout:SetWide( 16 * 5 + 4 * 2 )
 	self.ratingsLayout:DockMargin( 5, ( 25 - 16 ) / 2, 5, 0 )
 	self.ratingsLayout:Dock( LEFT )
@@ -94,7 +94,7 @@ function PANEL:Init( )
 		end
 	end
 	
-	self.numRatingsLabel = vgui.Create( "DLabel", ratingsBar )
+	self.numRatingsLabel = vgui.Create( "DLabel", self.ratingsBar )
 	self.numRatingsLabel:Dock( LEFT )
 	self.numRatingsLabel:SetFont( self:GetSkin( ).NumRatingsFont or "MapName" )
 	
@@ -110,6 +110,9 @@ function PANEL:Init( )
 	self.scroll:Dock( TOP )
 	self.scroll:SetTall( 54 )
 	Derma_Hook( self.scroll, "Paint", "Paint", "AvatarContainer" )
+	function self.scroll.OnMousePressed( )
+		self:DoClick( )
+	end
 	
 	self.voterPanels = vgui.Create( "AvatarContainer", self.scroll )
 	self.voterPanels:DockMargin( 0, 1, 0, 0 )

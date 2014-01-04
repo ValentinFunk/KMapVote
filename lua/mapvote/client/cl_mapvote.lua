@@ -113,7 +113,7 @@ hook.Add( "Think", "MapVoteThink", function( )
 			LocalPlayer( ).waitPanel:Remove( )
 		end
 	elseif STATE == "VoteGamemode" then
-		if not IsValid( LocalPlayer( ).gmVotingPanel ) then
+		if not IsValid( LocalPlayer( ).gmVotingPanel ) and not STATEVARS.PanelClosed then
 			LocalPlayer( ).gmVotingPanel = openGamemodeVotingFrame( STATEVARS.gamemodes )
 			gui.EnableScreenClicker( true )
 		end

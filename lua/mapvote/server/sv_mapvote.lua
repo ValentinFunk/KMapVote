@@ -403,32 +403,41 @@ function STATES.Vote:Init( )
 		for k, v in pairs( player.GetAll( ) ) do
 			local errors = table.concat( mapErrors, "\n" ) 
 			if v:IsAdmin( ) then
-				BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote] Errors have been detected in your config:\n" .. errors )
+				BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote|AdminOnly] Errors have been detected in your config:\n" .. errors )
 			end
 		end
 	end
 	
 	if MAPVOTE.MapCooldown then
-		DATABASES.KMapVote.DoQuery( 
-			"SELECT * FROM kmapvote_mapinfo ORDER BY createdAt DESC LIMIT " ..  MAPVOTE.MapCooldown,
-			true --blocking
-		)
-		:Then( function( rows )
-			rows = rows or {}
-			local mapsNotAllowed = {}
-			for k, row in pairs( rows ) do
-				table.insert( mapsNotAllowed, row.mapname )
-			end
-			
-			for k, mapTbl in pairs( self.maps ) do
-				if table.HasValue( mapsNotAllowed, mapTbl.name ) then
-					self.maps[k] = nil
+		if not DATABASES or not DATABASES.KMapVote then
+			for k, v in pairs( player.GetAll( ) ) do
+				local errors = table.concat( mapErrors, "\n" ) 
+				if v:IsAdmin( ) then
+					BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote|AdminOnly] There has been an error fetching ratings, please check your database configuration and the server console for errors. Contact Kamshak if this persists." )
 				end
 			end
-		end )
+		else
+			DATABASES.KMapVote.DoQuery( 
+				"SELECT * FROM kmapvote_mapinfo ORDER BY createdAt DESC LIMIT " ..  MAPVOTE.MapCooldown,
+				true --blocking
+			)
+			:Then( function( rows )
+				rows = rows or {}
+				local mapsNotAllowed = {}
+				for k, row in pairs( rows ) do
+					table.insert( mapsNotAllowed, row.mapname )
+				end
+				
+				for k, mapTbl in pairs( self.maps ) do
+					if table.HasValue( mapsNotAllowed, mapTbl.name ) then
+						self.maps[k] = nil
+					end
+				end
+			end )
+		end
 	end
 	
-	if MAPVOTE.EnableRatings and DATABASES.KMapVote.IsConnected then
+	if MAPVOTE.EnableRatings and DATABASES and DATABASES.KMapVote and DATABASES.KMapVote.IsConnected then
 		--Send Clients their previous vote
 		for k, v in pairs( player.GetAll( ) ) do
 			KMapVote.Rating.getDbEntries( Format( 

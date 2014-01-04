@@ -20,29 +20,34 @@ end
 	Gamemode Vote Settings
 */
 --Enable the vote of a gamemode prior to map vote
-MAPVOTE.VoteForGamemode = false
+MAPVOTE.VoteForGamemode = true
 
---Gamemodes that are available to vote for:
+--Time that players have to choose a new gamemode in s
+MAPVOTE.GamemodeVoteTime = 30
+
+--Gamemodes that are available to vote for (gamemode folder names):
 MAPVOTE.VoteGamemodes = {
-	"terrortown"
+	"terrortown",
+	"sandbox",
+	"stalker2"
 }
 
 
 /*
 	GUI Configuration
 */
-    --Use the CDN(content distribution network) to acquire mapicons without having to
-    --add them to the server downloads. If set to false all mapicons will be loaded from
-    --materials/mapicons, files should be named as follows:
-    --			1. Image: mapname.png
-    --			2. Image: mapname(1).png
-    --			3. Image: mapname(2).png 
-    --			and so on
-    --			example: de_dust.png, de_dust(1).png...
-    --If you want the slideshow feature to work you need to update sh_mapvote_iconcounts.lua and
-    --set how many icons you have for each map. You can use the script walkdircountmapicons.py from 
-    --the addon folder to have them counted automatically.
-    MAPVOTE.UseCDN = true --True to enable(works instantly), false to disable
+--Use the CDN(content distribution network) to acquire mapicons without having to
+--add them to the server downloads. If set to false all mapicons will be loaded from
+--materials/mapicons, files should be named as follows:
+--			1. Image: mapname.png
+--			2. Image: mapname(1).png
+--			3. Image: mapname(2).png 
+--			and so on
+--			example: de_dust.png, de_dust(1).png...
+--If you want the slideshow feature to work you need to update sh_mapvote_iconcounts.lua and
+--set how many icons you have for each map. You can use the script walkdircountmapicons.py from 
+--the addon folder to have them counted automatically.
+MAPVOTE.UseCDN = true --True to enable(works instantly), false to disable
 
 --Enable or Disable the poping sound when players change their vote
 MAPVOTE.EnableVoteSound = true
@@ -140,9 +145,6 @@ MAPVOTE.PostVoteTime = 3
 
 --Time that players have to choose a new map in s
 MAPVOTE.VoteTime = 30
-
---Time that players have to choose a new gamemode in s
-MAPVOTE.GamemodeVoteTime = 30
 
 --Allow voting to keep the current map
 MAPVOTE.AllowExtension = true

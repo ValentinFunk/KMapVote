@@ -1,13 +1,9 @@
 local PANEL = {}
 
 function PANEL:Init( )
-	self:SetSkin( MAPVOTE.DermaSkin )
-	
-	for k, v in pairs( self:GetChildren( ) ) do
-		v:Remove( )
-	end
-
 	self:DockPadding( 5, 5, 5, 5 )
+	
+	self.ratingsBar:Remove( )
 	
 	local topPanel = vgui.Create( "DPanel", self )
 	function topPanel:Paint( w, h )
@@ -19,6 +15,7 @@ function PANEL:Init( )
 	end
 	
 	
+	self.icon:Remove( )
 	self.icon = vgui.Create( "DImage", topPanel )
 	self.icon:Dock( LEFT )
 	self.icon:SetSize( 24, 24 )
@@ -27,6 +24,7 @@ function PANEL:Init( )
 		self:DoClick( )
 	end
 	
+	self.label:Remove( )
 	self.label = vgui.Create( "DLabel", topPanel )
 	self.label:SetColor( self:GetSkin( ).TextColor or color_white )
 	self.label:DockMargin( 5, 5, 0, 0 )
@@ -37,42 +35,17 @@ function PANEL:Init( )
 		self:DoClick( )
 	end
 	
-	self.scroll = vgui.Create( "DScrollPanel", self )
-	self.scroll:DockMargin( 0, 5, 0, 0 )
-	self.scroll:Dock( TOP )
-	self.scroll:SetTall( 54 )
-	Derma_Hook( self.scroll, "Paint", "Paint", "AvatarContainer" )
-	function self.scroll.OnMousePressed( )
-		self:DoClick( )
-	end
-	
-	self.voterPanels = vgui.Create( "AvatarContainer", self.scroll )
-	self.voterPanels:DockMargin( 0, 1, 0, 0 )
-	self.voterPanels:Dock( FILL )
-	self.voterPanels:SetTall( 54 )
-	self.voterPanels:SetMouseInputEnabled( true )
-	function self.voterPanels.OnMousePressed( )
-		self:DoClick( )
-	end
-	
 	local bottomPanel = vgui.Create( "DPanel", self )
 	bottomPanel:DockMargin( 5, 5, 5, 5 )
 	bottomPanel:Dock( TOP )
-	Derma_Hook( bottomPanel, "Paint", "Paint", "RateMapPanel" )
+	bottomPanel.Paint = function( ) end
+	function bottomPanel.OnMousePressed( )
+		self:DoClick( )
+	end
 	
-	self.scoreLabel = vgui.Create( "DLabel", bottomPanel )
-	self.scoreLabel:Dock( LEFT )
-	self.scoreLabel:SetText( "Score: " )
-	self.scoreLabel:SetFont( self:GetSkin( ).fontName or "MapName" )
-	self.scoreLabel:SetColor( self:GetSkin( ).TextColor or color_white )
-	self.scoreLabel:SizeToContents( )
-	
-	if LocalPlayer( ):CanOverride( ) then
-		self.adminOverride = vgui.Create( "DButton", bottomPanel )
-		self.adminOverride:DockMargin( 5, 5, 0, 0 )
-		self.adminOverride:SetText( "Force" )
+	if IsValid( self.adminOverride ) then
+		self.adminOverride:SetParent( bottomPanel )
 		self.adminOverride:Dock( RIGHT )
-		self.adminOverride:SetColor( self:GetSkin( ).TextColor or color_white )
 		function self.adminOverride.DoClick( )
 			Derma_Query( "Are you sure you want to force this gamemode?", 
 				"Please confirm",
@@ -85,16 +58,12 @@ function PANEL:Init( )
 				end 
 			)
 		end
-		function self.adminOverride:Paint( w, h )
-			if self.Hovered then
-				surface.SetDrawColor( self:GetSkin( ).HighlightColor )
-			else
-				surface.SetDrawColor( self:GetSkin( ).ButtonColor )
-			end
-			surface.DrawRect( 0, 0, w, h )
-			return false
-		end
 	end
+	
+	self.scoreLabel:SetParent( bottomPanel )
+	self.scoreLabel:Dock( LEFT )
+	
+	self.scroll:Dock( TOP )
 	
 	self:SetText( "" )
 	self:InvalidateLayout( true )
