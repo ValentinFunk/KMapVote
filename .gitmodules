@@ -1,0 +1,4 @@
+[submodule "LibK"]
+	path = LibK
+	url = https://github.com/Kamshak/LibK.git
+	branch = master
