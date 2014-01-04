@@ -49,11 +49,15 @@ MAPSLOADED = true
 	MAPVOTE:AddMap{
 		name = "ttt_67thway_v3",
 		label = "67th Way",
+		minplayers = 5,
+		maxplayers = 40
 	}
 
 	MAPVOTE:AddMap{
 		name = "ttt_aftermath_a1",
-		label = "Aftermath"
+		label = "Aftermath",
+		minplayers = 10,
+		maxplayers = 5,
 	}
 	
 	MAPVOTE:AddMap{
@@ -97,39 +101,6 @@ MAPSLOADED = true
 			"prop_hunt",
 		}
 	}
-	
-	MAPVOTE:AddMap{
-		name = "gm_construct",
-		labal = "Construct",
-		gamemodes = {
-			"terrortown",
-		}
-	}
-	
-	MAPVOTE:AddMap{
-		name = "ttt_bank_b3",
-		labal = "Bank",
-		gamemodes = {
-			"terrortown",
-		}
-	}
-	
-	MAPVOTE:AddMap{
-		name = "ttt_bb_teenroom_b2",
-		labal = "Teenroom",
-		gamemodes = {
-			"terrortown",
-		}
-	}
-	
-	MAPVOTE:AddMap{
-		name = "ttt_biocube",
-		labal = "Biocube",
-		gamemodes = {
-			"terrortown",
-		}
-	}
-				
 /*
 	End of map list
 */

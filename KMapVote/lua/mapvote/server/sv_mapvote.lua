@@ -129,7 +129,7 @@ function STATES.RockTheVote:Think( )
 		end
 	end
 	if numVotes >= math.Round( #player.GetAll( ) * MAPVOTE.RTVRequiredFraction ) then
-		if MAPVOTE.RTVWaitUntilTTTRoundEnd and GetRoundState then --GetRoundState is defined: current gm is TTT
+		if MAPVOTE.RTVWaitUntilTTTRoundEnd and engine.ActiveGamemode( ) == "terrortown" then
 			setState( "WaitForRoundEnd" )
 		else
 			if MAPVOTE.VoteForGamemode then
@@ -215,7 +215,7 @@ end
 STATES.VoteGamemode = {}
 function STATES.VoteGamemode:Init( )
 	self.playerVotes = {}
-	self.voteTimeout = CurTime( ) + MAPVOTE.VoteTime
+	self.voteTimeout = CurTime( ) + MAPVOTE.GamemodeVoteTime
 	
 	self.voteGamemodes = {}
 	for k, gm in pairs( engine.GetGamemodes( ) ) do
@@ -327,14 +327,22 @@ function STATES.Vote:Init( )
 	self.maps = {}
 	table.shuffle( MAPVOTE.maps )
 	
-	local gmTable
+	local gmTable 
 	if MAPVOTE.VoteForGamemode and self.wonGm then
 		for k, v in pairs( engine.GetGamemodes( ) ) do
 			if v.name == self.wonGm then
 				gmTable = v
 			end
 		end
+	else
+		for k, v in pairs( engine.GetGamemodes( ) ) do
+			if v.name == engine.ActiveGamemode() then
+				gmTable = v
+			end
+		end
 	end
+	
+	self.wonGm = self.wonGm or engine.ActiveGamemode()
 	
 	local mapErrors = {}
 	for _, map in pairs( MAPVOTE.maps ) do
@@ -354,31 +362,30 @@ function STATES.Vote:Init( )
 			continue --extension handled below
 		end
 		
-		if MAPVOTE.VoteForGamemode and self.wonGm then
-			--Check if map is valid for the upcoming gamemode
-			local isValidMap = false
-			local validMaps = string.Split( gmTable.maps, "|" )
-			if validMaps && gmTable.maps != "" then
-				for k, pattern in pairs( validMaps ) do
-					if string.find( string.lower( map.name ), pattern ) then
-						isValidMap = true
-						break
-					end
-				end
-			end
-			
-			--Check for override
-			if map.gamemodes then
-				if table.HasValue( map.gamemodes, self.wonGm ) then
+		--Check if map is valid for the upcoming gamemode
+		local isValidMap = false
+		local validMaps = string.Split( gmTable.maps, "|" )
+		if validMaps && gmTable.maps != "" then
+			for k, pattern in pairs( validMaps ) do
+				if string.find( string.lower( map.name ), pattern ) then
 					isValidMap = true
-				else
-					isValidMap = false --override override gm map pattern
+					break
 				end
 			end
+		end
 			
-			if not isValidMap then
-				continue
+		
+		--Check for override
+		if map.gamemodes then
+			if table.HasValue( map.gamemodes, self.wonGm ) then
+				isValidMap = true
+			else
+				isValidMap = false --override override gm map pattern
 			end
+		end
+		
+		if not isValidMap then
+			continue
 		end
 		
 		if not file.Exists( "maps/" .. map.name .. ".bsp", "GAME" ) then
@@ -722,16 +729,18 @@ if MAPVOTE.SetFrettaReplacement then
 end
 
 if MAPVOTE.SetDeathrunReplacement then
-	if RTV then
-		RTV.ChatCommands = { } --Disable deathrun RTV
-		function RTV.Start( )
-			if MAPVOTE.VoteForGamemode then
-				setState( "VoteGamemode" )
-			else
-				setState( "Vote" )
+	hook.Add( "InitPostEntity", "hookGMVoteDeathrun", function( )
+		if RTV then
+			RTV.ChatCommands = { } --Disable deathrun RTV
+			function RTV.Start( )
+				if MAPVOTE.VoteForGamemode then
+					setState( "VoteGamemode" )
+				else
+					setState( "Vote" )
+				end
 			end
 		end
-	end
+	end )
 end
 
 concommand.Add( "mapvote_forcerld", function( )

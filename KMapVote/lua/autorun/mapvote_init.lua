@@ -1,6 +1,7 @@
--- Short and sweet
-if SERVER then
-	include( "mapvote/init.lua" )
-else
-	include( "mapvote/cl_init.lua" )
-end
+LibK.InitializeAddon{
+    addonName = "KMapVote",                  --Name of the addon
+    author = "Kamshak",                         --Name of the author
+    luaroot = "mapvote",                     --Folder that contains the client/shared/server structure relative to the lua folder,
+	loadAfterGamemode = false
+}
+LibK.addReloadFile( "autorun/mapvote_init.lua" )

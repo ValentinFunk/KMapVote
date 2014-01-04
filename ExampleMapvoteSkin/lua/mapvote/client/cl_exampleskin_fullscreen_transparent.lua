@@ -1,8 +1,7 @@
-local function loadSkin( )
-
 local SKIN = {}
-
 SKIN.Name = "KMapVoteTransparentFS"
+
+local function loadSkin( )
 
 
 SKIN.BGColorFrom = Color( 19, 37, 55 )

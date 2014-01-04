@@ -63,7 +63,7 @@ function PANEL:Init( )
 	self.scoreLabel = vgui.Create( "DLabel", bottomPanel )
 	self.scoreLabel:Dock( LEFT )
 	self.scoreLabel:SetText( "Score: " )
-	self.scoreLabel:SetFont( self:GetSkin( ).fontName )
+	self.scoreLabel:SetFont( self:GetSkin( ).fontName or "MapName" )
 	self.scoreLabel:SetColor( self:GetSkin( ).TextColor or color_white )
 	self.scoreLabel:SizeToContents( )
 	
@@ -87,9 +87,9 @@ function PANEL:Init( )
 		end
 		function self.adminOverride:Paint( w, h )
 			if self.Hovered then
-				surface.SetDrawColor( MAPVOTE.HighlightColor )
+				surface.SetDrawColor( self:GetSkin( ).HighlightColor )
 			else
-				surface.SetDrawColor( MAPVOTE.ButtonColor )
+				surface.SetDrawColor( self:GetSkin( ).ButtonColor )
 			end
 			surface.DrawRect( 0, 0, w, h )
 			return false

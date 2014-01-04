@@ -5,7 +5,7 @@ MAPVOTE.maps = {}
 function MAPVOTE:AddMap( map )
 	table.insert( self.maps, map )
 	if MAPVOTE.Debug then
-		print( "[MapVote] Map " .. map.name .. " added" )
+		KLogf( 4, "     -> " .. map.name .. " added" )
 	end
 end
 
@@ -42,7 +42,7 @@ MAPVOTE.VoteGamemodes = {
     --If you want the slideshow feature to work you need to update sh_mapvote_iconcounts.lua and
     --set how many icons you have for each map. You can use the script walkdircountmapicons.py from 
     --the addon folder to have them counted automatically.
-    MAPVOTE.UseCDN = false --True to enable(works instantly), false to disable
+    MAPVOTE.UseCDN = true --True to enable(works instantly), false to disable
 
 --Enable or Disable the poping sound when players change their vote
 MAPVOTE.EnableVoteSound = true
@@ -140,6 +140,9 @@ MAPVOTE.PostVoteTime = 3
 
 --Time that players have to choose a new map in s
 MAPVOTE.VoteTime = 30
+
+--Time that players have to choose a new gamemode in s
+MAPVOTE.GamemodeVoteTime = 30
 
 --Allow voting to keep the current map
 MAPVOTE.AllowExtension = true
