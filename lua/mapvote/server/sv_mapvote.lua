@@ -724,7 +724,10 @@ if MAPVOTE.UseTerrortown then
 end
 
 if MAPVOTE.SetFrettaReplacement then
-	hook.Add( "InitPostEntity", "hookGMVote", function( )
+	hook.Add( "Think", "hookGMVote", function( )
+		if GAMEMODE.StartGamemodeVote then
+			--KLogf( 4, "Found GAMEMODE.StartGamemodeVote, patching..." )
+		end
 		function GAMEMODE:StartGamemodeVote()
 			if not GAMEMODE.m_bVotingStarted then
 				if MAPVOTE.VoteForGamemode then
@@ -736,10 +739,57 @@ if MAPVOTE.SetFrettaReplacement then
 			end
 		end
 		
+		if GAMEMODE.VoteForChange then
+			--KLogf( 4, "Found GAMEMODE.VoteForChange, patching..." )
+		end
+		function GAMEMODE:VoteForChange( ply )
+			MAPVOTE:PlayerRTV( ply )
+		end
+		
+		if GAMEMODE.StartMapVote then
+			--KLogf( 4, "Found GAMEMODE.StartMapVote, patching..." )
+		end
 		function GAMEMODE:StartMapVote( )
 			if not GAMEMODE.m_bVotingStarted then
 				setState( "Vote" )
 				GAMEMODE.m_bVotingStarted = true
+			end
+		end
+		
+		if MapVote then
+			if MapVote then
+				--KLogf( 4, "Found MapVote, patching MapVote.Start..." )
+			end
+			function MapVote.Start( )
+				if MAPVOTE.VoteForGamemode then
+					setState( "VoteGamemode" )
+				else
+					setState( "Vote" )
+				end
+			end
+		end
+		
+		if FC_VOTE then
+			--KLogf( 2, "[KMapVote][WARNING] found FCVote, replacing it's functions!" )
+		end
+		FC_VOTE = {}
+		function FC_VOTE:StartVote( )
+				if MAPVOTE.VoteForGamemode then
+					setState( "VoteGamemode" )
+				else
+					setState( "Vote" )
+				end
+		end
+		function FC_VOTE.CheckRTV( )
+			--KLogf( 2, "[KMapVote][WARNING] FCVote CheckRTV called! Please contact kam" )
+		end
+		
+		if RTV then
+			if RTV then
+				--KLogf( 4, "Found RTV, patching RTV.StartVote..." )
+			end
+			function RTV.StartVote( ply )
+				MAPVOTE:PlayerRTV( ply )
 			end
 		end
 	end )
