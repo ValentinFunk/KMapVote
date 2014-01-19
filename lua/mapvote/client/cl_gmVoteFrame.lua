@@ -1,8 +1,6 @@
 local PANEL = {}
 
 function PANEL:Init( )
-	self:SetSize( 800, 680 )
-	
 	self:SetSkin( MAPVOTE.DermaSkin )
 	
 	--gmpanels, name is mappanels because of inheritance, k?

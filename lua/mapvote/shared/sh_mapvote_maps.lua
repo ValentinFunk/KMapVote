@@ -45,6 +45,12 @@ MAPSLOADED = true
 			and so on
 			example: de_dust.png, de_dust(1).png...
 */
+	MAPVOTE:AddMap{
+		name = "gm_construct",
+		label = "Construct",
+		minplayers = 5,
+		maxplayers = 40
+	}
 
 	MAPVOTE:AddMap{
 		name = "ttt_67thway_v3",

@@ -69,10 +69,10 @@ function updatePreviousRating( len, retries )
 	print( "update prev " .. prevRating )
 	local function doIt( )
 		if not IsValid( LocalPlayer( ).votingPanel ) then
-			print( "retry" )
 			if retries > 3 then return end
+			retries = retries + 1
 			timer.Simple( 1, function( )
-				doIt( retries + 1 )
+				doIt( retries )
 			end )
 			return
 		end

@@ -68,10 +68,12 @@ hook.Add( "PlayerInitialSpawn", "MapVoteUpdateState", function( ply )
 	if not state then
 		error( "[KMapVote]Couldn't send state, state " .. STATE .. " does not exist" )
 	end
-	net.Start( "VotemapState" )
-		net.WriteString( STATE )
-		net.WriteTable( state.netStateVars )
-	net.Broadcast( )
+	timer.Simple( 2, function( ) 
+		net.Start( "VotemapState" )
+			net.WriteString( STATE )
+			net.WriteTable( state.netStateVars )
+		net.Broadcast( )
+	end )
 end )
 
 STATES.STATE_NOVOTE = {}
