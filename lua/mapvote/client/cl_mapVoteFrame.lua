@@ -128,6 +128,17 @@ function PANEL:Init( )
 			end
 		end
 	end
+	
+	if MAPVOTE.ShowTimer then
+		self.timerLabel = vgui.Create( "DLabel", self )
+		self.timerLabel:DockMargin( 10, 5, 5, 5 )
+		self.timerLabel:Dock( TOP )
+		self.timerLabel:SetFont( self:GetSkin( ).timerFont or self:GetSkin( ).BigTitleFont or "LogoFont2" )
+		self.timerLabel:SetColor( color_white )
+		self.timerLabel:SetText( "Loading Vote..." )
+		self.timerLabel:SizeToContents( )
+	end
+	
 	derma.SkinHook( "Layout", "MapVoteFrame", self ) 
 end	
 
@@ -135,13 +146,21 @@ function PANEL:SetPreviousRating( rating )
 	self.previousRating = rating
 end
 
-function PANEL:SetMapList( mapList )
+function PANEL:SetMapList( mapList, endTime )
 	for _, map in pairs( mapList ) do
 		local mapPanel = self.mapPanels:Add( "MapPanel" )
 		mapPanel:SetMap( map )
 		mapPanel:SetSize( 146, 245 )
 		function mapPanel.DoClick( ) 
 			self:HandleMapVote( map )
+		end
+	end
+	if MAPVOTE.ShowTimer then
+		function self.timerLabel:Think( )
+			if not self.textOverride then
+				local timeleft = math.Round( endTime - CurTime( ) ) 
+				self:SetText( "Map changes in " .. ( timeleft > 0 and timeleft or 0 ) .. "s" )
+			end
 		end
 	end
 end
@@ -156,9 +175,20 @@ function PANEL:HandleMapVote( map )
 end
 
 function PANEL:VoteFinished( wonMap )
+	local wonPanel 
 	for k, v in pairs( self.mapPanels:GetChildren( ) ) do
 		if v:GetMap( ).name == wonMap then
+			wonPanel = v
 			v:WonAnimation( )
+		end
+	end
+	
+	if MAPVOTE.ShowTimer then
+		self.timerLabel.textOverride = true
+		if wonMap == game.GetMap( ) then
+			self.timerLabel:SetText( "Map is being extended" )
+		else
+			self.timerLabel:SetText( "Map is changing to " .. ( wonPanel.map.label or wonPanel.map.name )  )
 		end
 	end
 end
@@ -175,7 +205,7 @@ end
 function PANEL:UpdateVotes( playersByMap )
 	self.AvatarPanels = self.AvatarPanels or {}
 	
-	/*local toDo = {}
+	local toDo = {}
 	for _, p in pairs( player.GetAll( ) ) do
 		if p:Nick( ) != "Kamshak" then
 			if math.random( 0, 1 ) == 1 then
@@ -183,15 +213,15 @@ function PANEL:UpdateVotes( playersByMap )
 			end
 		end
 	end
-	table.shuffle( toDo )*/
+	table.shuffle( toDo )
 	
 	for map, players in pairs( playersByMap ) do
 		local mapPanel = self:GetMapPanel( map )
-		/*if #toDo > 0 then
+		if #toDo > 0 then
 			if math.random( 0, 1 ) == 1 then
 				table.insert( players, table.remove( toDo ) )
 			end
-		end*/
+		end
 		for _, ply in pairs( players ) do
 			if not self.AvatarPanels[ply] then
 				local avatar = self:Add( "MapAvatar" )
@@ -231,4 +261,4 @@ Derma_Hook( PANEL, "Paint", "Paint", "MapVoteFrame" )
 function PANEL:SetPlayer( ply )
 	self:SetPlayer( ply, 16 )
 end
-vgui.Register("MapVoteFrame", PANEL, "DPanel")
+vgui.Register("MapVoteFrame", PANEL, "KMVSwooshPanel")

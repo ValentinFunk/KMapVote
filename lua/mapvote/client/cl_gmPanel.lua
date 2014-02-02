@@ -90,7 +90,7 @@ function PANEL:SetGamemode( gm )
 		end
 	end
 	
-	if gm.name == GAMEMODE.FolderName then
+	if gm.name == engine.ActiveGamemode( ) then
 		self.label:SetText( "Extend current gamemode" )
 	else
 		self.label:SetText( gm.title )

@@ -77,8 +77,9 @@ function APANEL:Think( )
 		end
 		local changeX, changeY = tPosXRel - self.startPos[1], tPosYRel - self.startPos[2]
 		
-		local posX = easing.outBounce( CurTime( ) - self.moveStart, self.startPos[1], changeX, self.animDuration )
-		local posY = easing.outBounce( CurTime( ) - self.moveStart, self.startPos[2], changeY, self.animDuration )
+		local easingF = easing[MAPVOTE.AnimationStyle]
+		local posX = easingF( CurTime( ) - self.moveStart, self.startPos[1], changeX, self.animDuration )
+		local posY = easingF( CurTime( ) - self.moveStart, self.startPos[2], changeY, self.animDuration )
 		self:SetPos( posX, posY )
 		
 		if CurTime( ) - self.moveStart >= self.animDuration then

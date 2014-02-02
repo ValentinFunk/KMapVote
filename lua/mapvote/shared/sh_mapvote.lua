@@ -20,7 +20,7 @@ end
 	Gamemode Vote Settings
 */
 --Enable the vote of a gamemode prior to map vote
-MAPVOTE.VoteForGamemode = true
+MAPVOTE.VoteForGamemode = false
 
 --Time that players have to choose a new gamemode in s
 MAPVOTE.GamemodeVoteTime = 30
@@ -92,6 +92,19 @@ MAPVOTE.LogoMinWidth = 128
 MAPVOTE.LogoMaxWidth = 1200
 MAPVOTE.LogoScreenScale = 1/6 --Use 1/6 of the screen size for the logo size
 
+--Set to true to show a timer that shows the time left to vote
+MAPVOTE.ShowTimer = true
+
+--Animation Style of the animated avatars
+--Valid Styles:
+-- linear, inQuad, outQuad, inOutQuad, outInQuad, inCubic, outCubic, inOutCubic,
+-- outInCubic, inQuart, outQuart, inOutQuart, outInQuart, inQuint, outQuint, inOutQuint, 
+-- outInQuint, inSine, outSine, inOutSine, outInSine, inCirc, outCirc, inOutCirc, outInCirc,
+-- inElastic, outElastic, inOutElastic, outInElastic, inBack, outBack, inOutBack, outInBack, 
+-- outBounce, inBounce, inOutBounce, outInBounce
+-- Default: outBounce
+MAPVOTE.AnimationStyle = "inOutQuad"
+
 /*
 	RTV - Rock the Vote Settings
 */
@@ -144,7 +157,7 @@ MAPVOTE.TimeBetweenVotes = false
 MAPVOTE.PostVoteTime = 3
 
 --Time that players have to choose a new map in s
-MAPVOTE.VoteTime = 30
+MAPVOTE.VoteTime = 50
 
 --Allow voting to keep the current map
 MAPVOTE.AllowExtension = true

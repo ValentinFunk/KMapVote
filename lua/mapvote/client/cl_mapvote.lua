@@ -12,17 +12,19 @@ net.Receive( "VotemapState", function( len )
 	end
 end )
 
-local function openVotingFrame( mapList )
+local function openVotingFrame( mapList, endTime )
 	local mainPanel = vgui.Create( "MapVoteFrame" )
-	mainPanel:SetMapList( mapList )
+	mainPanel:SetMapList( mapList, endTime )
+	mainPanel:startSlideIn( )
 	--mainPanel:MakePopup( )
 	
 	return mainPanel
 end
 
-local function openGamemodeVotingFrame( gmList )
+local function openGamemodeVotingFrame( gmList, endTime )
 	local mainPanel = vgui.Create( "GMVoteFrame" )
-	mainPanel:SetGMList( gmList )
+	mainPanel:SetGMList( gmList, endTime )
+	mainPanel:startSlideIn( )
 	--mainPanel:MakePopup( )
 	
 	return mainPanel
@@ -82,15 +84,37 @@ function updatePreviousRating( len, retries )
 end
 net.Receive( "MapVotePreviousRating", updatePreviousRating )
 
+local function fadeOutGMPanel( )
+	if LocalPlayer( ).gmVotingPanel:startSlideOut( ) then
+		LocalPlayer( ).gmVotingPanel:Remove( )
+		return true
+	end
+	return false
+end
+
+local function fadeOutVotingPanel( )
+	if LocalPlayer( ).votingPanel:startSlideOut( ) then
+		LocalPlayer( ).votingPanel:Close( )
+		return true
+	end
+	return false
+end
+
+
 if IsValid( LocalPlayer( ).votingPanel ) then LocalPlayer( ).votingPanel:Remove( ) end
 hook.Add( "Think", "MapVoteThink", function( )
 	if STATE == "STATE_NOVOTE" then
 		if IsValid( LocalPlayer( ).votingPanel ) then
-			LocalPlayer( ).votingPanel:Close( )
-			gui.EnableScreenClicker( false )
+			if not fadeOutVotingPanel( ) then
+				return
+			else
+				gui.EnableScreenClicker( false )
+			end
 		end
 		if IsValid( LocalPlayer( ).gmVotingPanel ) then
-			LocalPlayer( ).gmVotingPanel:Remove( )
+			if not fadeOutGMPanel( ) then
+				return
+			end
 		end
 		if IsValid( LocalPlayer( ).rtvPanel ) then
 			LocalPlayer( ).rtvPanel:Remove( )
@@ -100,11 +124,13 @@ hook.Add( "Think", "MapVoteThink", function( )
 		end
 	elseif STATE == "Vote" then
 		if not IsValid( LocalPlayer( ).votingPanel ) and not STATEVARS.PanelClosed then
-			LocalPlayer( ).votingPanel = openVotingFrame( STATEVARS.mapList )
+			LocalPlayer( ).votingPanel = openVotingFrame( STATEVARS.mapList, STATEVARS.endTime )
 			gui.EnableScreenClicker( true )
 		end
 		if IsValid( LocalPlayer( ).gmVotingPanel ) then
-			LocalPlayer( ).gmVotingPanel:Remove( )
+			if not fadeOutGMPanel( ) then
+				return
+			end
 		end
 		if IsValid( LocalPlayer( ).rtvPanel ) then
 			LocalPlayer( ).rtvPanel:Remove( )
@@ -114,7 +140,7 @@ hook.Add( "Think", "MapVoteThink", function( )
 		end
 	elseif STATE == "VoteGamemode" then
 		if not IsValid( LocalPlayer( ).gmVotingPanel ) and not STATEVARS.PanelClosed then
-			LocalPlayer( ).gmVotingPanel = openGamemodeVotingFrame( STATEVARS.gamemodes )
+			LocalPlayer( ).gmVotingPanel = openGamemodeVotingFrame( STATEVARS.gamemodes, STATEVARS.endTime )
 			gui.EnableScreenClicker( true )
 		end
 		if IsValid( LocalPlayer( ).rtvPanel ) then

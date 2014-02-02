@@ -23,14 +23,25 @@ function PANEL:HandleGMVote( gm )
 end
 
 function PANEL:VoteFinished( wonGm )
+	local panelWon = v
 	for k, v in pairs( self.mapPanels:GetChildren( ) ) do
 		if v:GetGamemode( ).name == wonGm then
+			panelWon = v
 			v:WonAnimation( )
+		end
+	end
+	
+	if MAPVOTE.ShowTimer then
+		self.timerLabel.textOverride = true
+		if wonMap == engine.ActiveGamemode( ) then
+			self.timerLabel:SetText( "Gamemode is being extended" )
+		else
+			self.timerLabel:SetText( panelWon.gm.title .. " won the vote!" )
 		end
 	end
 end
 
-function PANEL:SetGMList( gamemodes )
+function PANEL:SetGMList( gamemodes, endTime )
 	for _, gm in pairs( gamemodes ) do
 		local mapPanel = self.mapPanels:Add( "GMPanel" )
 		mapPanel:SetGamemode( gm )
@@ -39,6 +50,15 @@ function PANEL:SetGMList( gamemodes )
 			self:HandleGMVote( gm )
 		end
 	end
+	
+	if MAPVOTE.ShowTimer then
+		function self.timerLabel:Think( )
+			if not self.textOverride then
+				local timeleft = math.Round( endTime - CurTime( ) ) 
+				self:SetText( "Vote ends in " .. ( timeleft > 0 and timeleft or 0 ) .. "s" )
+			end
+		end
+	end
 end
 
-vgui.Register("GMVoteFrame", PANEL, "MapVoteFrame")
+vgui.Register("GMVoteFrame", PANEL, "KMVSwooshPanel")

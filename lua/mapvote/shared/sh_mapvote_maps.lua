@@ -113,6 +113,16 @@ MAPSLOADED = true
 			"prop_hunt",
 		}
 	}
+	
+	MAPVOTE:AddMap{
+		name = "cs_office",
+		label = "Office", 
+		gamemodes = {
+			"murder", 
+			"terrortown",
+			"prop_hunt"
+		}
+	}
 /*
 	End of map list
 */
