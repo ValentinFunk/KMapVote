@@ -192,6 +192,23 @@ MAPVOTE.SetDeathrunReplacement = true
 --Set to true to enable overwriting the fretta mapvote(will trigger KMapVote instead)
 MAPVOTE.SetFrettaReplacement = true
 
+--Set to true to enable overwriting the Chessnut Jailbreak's mapvoting system
+MAPVOTE.CNJailbreakIntegrationEnabled = true
+
+/*
+	Murder Settings
+*/
+MAPVOTE.Murder = {}
+
+--Enable Murder integration
+MAPVOTE.Murder.Enable = true
+
+--Announce rounds left until a vote starts in chat after each round
+MAPVOTE.Murder.AnnounceInChat = true 
+
+--Amount of rounds to play on each map until the vote starts
+MAPVOTE.Murder.MaxRounds = 5
+
 /*
 	Admin Settings and vote powers
 */
@@ -212,6 +229,8 @@ MAPVOTE.AllowOverrideGroups = {
 MAPVOTE:SetVotePower( "user", 1 )
 MAPVOTE:SetVotePower( "admin", 2 )
 MAPVOTE:SetVotePower( "superadmin", 2 )
+
+
 	
 	
 /*

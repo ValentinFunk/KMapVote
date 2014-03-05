@@ -35,7 +35,7 @@ local function setState( strState )
 end
 
 concommand.Add( "mapvote_force_vote", function( ply, cmd, args )
-	if ply and not ply:IsAdmin( ) then
+	if IsValid( ply ) and not ply:IsAdmin( ) then
 		return
 	end
 	
@@ -468,6 +468,17 @@ function STATES.Vote:Init( )
 		KMapVote.Rating.addRatingSummaryToMaps( self.maps )
 	end
 	
+	if #self.maps < 1 then
+		for k, v in pairs( player.GetAll( ) ) do
+			if v:IsAdmin( ) then
+				BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote|AdminOnly][CRITICAL] No map criteria matched the current config! Aborting vote!" )
+			end
+		end
+		KLogf( 2, "[ERROR] There was no map that would be valid for the current config! Please fix it!" )
+		setState( "STATE_NOVOTE" )
+		return
+	end
+	
 	--Send list to client
 	self.netStateVars = { 
 		mapList = self.maps, 
@@ -616,12 +627,16 @@ function STATES.VoteFinished:Think( )
 		function doChangeMap( )	
 			changed = true
 			if self.wonMap == game.GetMap() then
+				--Map Extension
+				
+				--Change map if gamemode changed
 				if MAPVOTE.VoteForGamemode and STATES.Vote.wonGm and STATES.Vote.wonGm != GAMEMODE.FolderName then
 					RunConsoleCommand( "gamemode", STATES.Vote.wonGm )
 					RunConsoleCommand( "changelevel", self.wonMap )
 				end
-				setState( "STATE_NOVOTE" )
 				
+				hook.Call( "KMapVoteMapExtension" )
+				setState( "STATE_NOVOTE" )
 				if MAPVOTE.TimeBetweenVotes then
 					STATES.STATE_NOVOTE.nextVote = CurTime( ) + MAPVOTE.TimeBetweenVotes * 60
 				end
@@ -812,8 +827,23 @@ if MAPVOTE.SetDeathrunReplacement then
 	end )
 end
 
-concommand.Add( "mapvote_forcerld", function( )
-	for k,v in pairs(player.GetAll()) do v:SendLua( "include( 'autorun/_libk_loader.lua' ) include( 'autorun/mapvote_init.lua' )" ) end
-	include( 'autorun/_libk_loader.lua' ) 
-	include( 'autorun/mapvote_init.lua' )
-end )
+--Interface
+
+--Force a map vote
+function MAPVOTE:StartMapVote( )
+	setState( "Vote" )
+end	
+
+--Force a gamemode vote
+function MAPVOTE:StartGamemodeVote( )
+	setState( "VoteGamemode" )
+end
+
+--Force a vote as per config
+function MAPVOTE:BeginVote( )
+	if MAPVOTE.VoteForGamemode then
+		setState( "VoteGamemode" )
+	else
+		setState( "Vote" )
+	end
+end
