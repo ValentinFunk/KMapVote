@@ -1,6 +1,7 @@
 local PANEL = {}
 
 function PANEL:Init( )
+	print( "GMVoteFrame init" )
 	self:SetSkin( MAPVOTE.DermaSkin )
 	
 	--gmpanels, name is mappanels because of inheritance, k?
@@ -61,4 +62,4 @@ function PANEL:SetGMList( gamemodes, endTime )
 	end
 end
 
-vgui.Register("GMVoteFrame", PANEL, "KMVSwooshPanel")
+vgui.Register("GMVoteFrame", PANEL, "MapVoteFrame")

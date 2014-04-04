@@ -131,7 +131,9 @@ function STATES.RockTheVote:Think( )
 		end
 	end
 	if numVotes >= math.Round( #player.GetAll( ) * MAPVOTE.RTVRequiredFraction ) then
-		if MAPVOTE.RTVWaitUntilTTTRoundEnd and engine.ActiveGamemode( ) == "terrortown" then
+		if MAPVOTE.RTVWaitUntilTTTRoundEnd 
+		   and ( engine.ActiveGamemode( ) == "terrortown" or engine.ActiveGamemode( ) == "murder" ) 
+		then
 			setState( "WaitForRoundEnd" )
 		else
 			if MAPVOTE.VoteForGamemode then
@@ -149,14 +151,23 @@ function STATES.WaitForRoundEnd:Init( )
 end
 
 function STATES.WaitForRoundEnd:Think( )
-	if GetRoundState( ) == ROUND_POST then
-		if MAPVOTE.VoteForGamemode then
-			setState( "VoteGamemode" )
-		else
-			setState( "Vote" )
+	if engine.ActiveGamemode( ) == "terrortown" then
+		if GetRoundState( ) == ROUND_POST then
+			MAPVOTE:BeginVote( )
+		end
+	elseif engine.ActiveGamemode( ) == "murder" then
+		if GAMEMODE:GetRound( ) == 2 		--About to start new round
+		   or GAMEMODE:GetRound( ) == 0		--Not 100% sure...
+		then
+			MAPVOTE:BeginVote( )
 		end
 	end
 end
+hook.Add( "KMapVoteRoundEnded", "RoundEndedStartVote", function( )
+	if MAPVOTE:GetState( ) == "WaitForRoundEnd" then
+		MAPVOTE:BeginVote( )
+	end
+end )
 
 
 function SecondsToClock(sSeconds)
@@ -225,6 +236,8 @@ function STATES.VoteGamemode:Init( )
 			table.insert( self.voteGamemodes, gm )
 		end
 	end
+	
+	hook.Call( "KMapVote_GamemodeVoteStarted" )
 	self.netStateVars = {
 		gamemodes = self.voteGamemodes,
 		endTime = self.voteTimeout
@@ -315,6 +328,10 @@ function STATES.GMVoteFinished:Think( )
 	if CurTime( ) >= self.voteGmTimeout then
 		--Start Map Vote
 		STATES.Vote.wonGm = self.wonGm
+		
+		--To Make sure the maps get picked up from the content folders
+		RunConsoleCommand( "gamemode", self.wonGm )
+		
 		setState( "Vote" )
 	end
 end
@@ -342,6 +359,8 @@ local function isMapGoodForGamemode( map, gmTable )
 			isValidMap = false --override override gm map pattern
 		end
 	end
+	
+	KLogf( 5, "Map %s is not within the valid gamemode pattern for gm %s pattern %s", map.name, gmTable.name, gmTable.maps )
 	
 	return isValidMap
 end
@@ -402,8 +421,13 @@ function STATES.Vote:Init( )
 		table.insert( self.maps, map )
 	end
 	if MAPVOTE.AllowExtension then
-		local map = { name = game.GetMap( ) }
-		if isMapGoodForGamemode( map, gmTable ) then
+		local map
+		for k, v in pairs( MAPVOTE.maps ) do
+			if v.name == game.GetMap( ) then
+				map = v
+			end
+		end
+		if map and isMapGoodForGamemode( map, gmTable ) then
 			table.insert( self.maps, map )
 		end
 	end
@@ -489,7 +513,7 @@ function STATES.Vote:Init( )
 end
 
 function STATES.Vote:Think( )
-	if CurTime( ) >= self.voteTimeout then
+	if CurTime( ) >= self.voteTimeout or #self.maps == 1 then
 		--Find winner
 		local scoreByMap = {} --map = score
 		for ply, map in pairs( self.playerVotes ) do
@@ -846,4 +870,8 @@ function MAPVOTE:BeginVote( )
 	else
 		setState( "Vote" )
 	end
+end
+
+function MAPVOTE:GetState( )
+	return STATE
 end

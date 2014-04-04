@@ -85,7 +85,11 @@ end
 net.Receive( "MapVotePreviousRating", updatePreviousRating )
 
 local function fadeOutGMPanel( )
-	if LocalPlayer( ).gmVotingPanel:startSlideOut( ) then
+	if not LocalPlayer( ).gmVotingPanel.started then
+		LocalPlayer( ).gmVotingPanel:startSlideOut( )
+		LocalPlayer( ).gmVotingPanel.started = true
+	end
+	if LocalPlayer( ).gmVotingPanel:fadeOut( ) then
 		LocalPlayer( ).gmVotingPanel:Remove( )
 		return true
 	end
@@ -93,8 +97,12 @@ local function fadeOutGMPanel( )
 end
 
 local function fadeOutVotingPanel( )
-	if LocalPlayer( ).votingPanel:startSlideOut( ) then
-		LocalPlayer( ).votingPanel:Close( )
+	if not LocalPlayer( ).votingPanel.started then
+		LocalPlayer( ).votingPanel:startSlideOut( )
+		LocalPlayer( ).votingPanel.started = true
+	end
+	if LocalPlayer( ).votingPanel:fadeOut( ) then
+		LocalPlayer( ).votingPanel:Remove( )
 		return true
 	end
 	return false

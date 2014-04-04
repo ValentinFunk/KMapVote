@@ -1,7 +1,5 @@
 local PANEL = {}
 
-
-
 surface.CreateFont( "LogoFont2", {
  font = "Arial",
  size = 24,
@@ -205,7 +203,7 @@ end
 function PANEL:UpdateVotes( playersByMap )
 	self.AvatarPanels = self.AvatarPanels or {}
 	
-	local toDo = {}
+	/*local toDo = {}
 	for _, p in pairs( player.GetAll( ) ) do
 		if p:Nick( ) != "Kamshak" then
 			if math.random( 0, 1 ) == 1 then
@@ -213,15 +211,15 @@ function PANEL:UpdateVotes( playersByMap )
 			end
 		end
 	end
-	table.shuffle( toDo )
+	table.shuffle( toDo )*/
 	
 	for map, players in pairs( playersByMap ) do
 		local mapPanel = self:GetMapPanel( map )
-		if #toDo > 0 then
+		/*if #toDo > 0 then
 			if math.random( 0, 1 ) == 1 then
 				table.insert( players, table.remove( toDo ) )
 			end
-		end
+		end*/
 		for _, ply in pairs( players ) do
 			if not self.AvatarPanels[ply] then
 				local avatar = self:Add( "MapAvatar" )
