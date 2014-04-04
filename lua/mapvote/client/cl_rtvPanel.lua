@@ -87,6 +87,6 @@ function PANEL:Think( )
 			score = score + 1
 		end
 	end
-	self.timeLeftLabel:SetText( score .. " / " .. math.Round( #player.GetAll( ) * MAPVOTE.RTVRequiredFraction ) .. " reached, Time Left: " .. math.Round( self.endTime - CurTime( ) ) )
+	self.timeLeftLabel:SetText( score .. " / " .. math.Round( #player.GetAll( ) * MAPVOTE.RTVRequiredFraction ) .. " reached, Time Left: " .. math.Round( ( self.endTime or 0 ) - CurTime( ) ) )
 end
 vgui.Register("RtvPanel", PANEL, "DPanel")
