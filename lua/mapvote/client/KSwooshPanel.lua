@@ -27,6 +27,7 @@ function PANEL:fadeIn( )
 	self:SetTall( height )
 	if timeElapsed >= self.slideInDuration / 2 then
 		self.fadedOut = false
+		self.fading = false
 		return true
 	end
 	return false
@@ -40,32 +41,27 @@ function PANEL:fadeOut( )
 	self:SetTall( height )
 	if timeElapsed >= self.slideInDuration / 2 then
 		self.fadedOut = true
+		self.fading = false
 		return true
 	end
 	return false
 end
 
 function PANEL:startSlideIn( )
-	self.fadingStarted = true
-	self:SetTall( 0.001 )
-	self.operation = "slidein"
-	if not self.fading then
-		self.fadeStart = CurTime( )
-		self.fading = true
-	else
+	if not self.fading or self.operation == "slideout" then
+		self.fadingStarted = true
+		self:SetTall( 0.001 )
+		self.operation = "slidein"
 		self.fadeStart = CurTime( )
 		self.fading = true
 	end
 end
 
 function PANEL:startSlideOut( )
-	self.fadingStarted = true
-	self:SetTall( 0.001 )
-	self.operation = "slideout"
-	if not self.fading then
-		self.fadeStart = CurTime( )
-		self.fading = true
-	else
+	if not self.fading or self.operation == "slidein" then
+		self.fadingStarted = true
+		self:SetTall( 0.001 )
+		self.operation = "slideout"
 		self.fadeStart = CurTime( )
 		self.fading = true
 	end
