@@ -86,6 +86,7 @@ function STATES.STATE_NOVOTE:Init( )
 	
 	if MAPVOTE.TimeBetweenVotes and not self.nextVote then
 		self.nextVote = CurTime( ) + MAPVOTE.TimeBetweenVotes * 60
+		self.netStateVars = { nextVote = self.nextVote }
 	end
 end
 
@@ -348,7 +349,9 @@ local function isMapGoodForGamemode( map, gmTable )
 			end
 		end
 	end
-		
+	if not isValidMap then
+		KLogf( 5, "Map %s is not within the valid gamemode pattern for gm %s pattern %s", map.name, gmTable.name, gmTable.maps )
+	end	
 	
 	--Check for override
 	if map.gamemodes then
@@ -360,7 +363,6 @@ local function isMapGoodForGamemode( map, gmTable )
 		end
 	end
 	
-	KLogf( 5, "Map %s is not within the valid gamemode pattern for gm %s pattern %s", map.name, gmTable.name, gmTable.maps )
 	
 	return isValidMap
 end
@@ -874,4 +876,8 @@ end
 
 function MAPVOTE:GetState( )
 	return STATE
+end
+
+function MAPVOTE:GetStateTable( )
+	return STATES[STATE]
 end

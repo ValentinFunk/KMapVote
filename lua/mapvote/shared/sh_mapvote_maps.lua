@@ -123,6 +123,74 @@ MAPSLOADED = true
 			"prop_hunt"
 		}
 	}
+	
+	--Melonbomber
+	MAPVOTE:AddMap{
+		name = "mb_melonbomber",
+		label = "Melonbomber"
+	}
+	
+	--Hallowgrounds
+	MAPVOTE:AddMap{
+		name = "hg_hallowgrounds",
+		label = "Hallowgrounds"
+	}
+	
+	--Metal Melon
+	MAPVOTE:AddMap{
+		name = "gm_mm_screamlane",
+		label = "Screamlane",
+		gamemodes = {
+			"metalmelon"
+		}
+	}
+	
+	--Honeypot
+	MAPVOTE:AddMap{
+		name = "hp_melonmart_final",
+		label = "Melonmart",
+		gamemodes = {
+			"honeypot"
+		}
+	}
+	
+	--Melonfight
+	MAPVOTE:AddMap{
+		name = "mf_gcc",
+		label = "Melonfight Hills"
+	}
+	
+	--Pedobear Escape 2
+	MAPVOTE:AddMap{
+		name = "pb_arena_2014",
+		label = "Arena 2014"
+	}
+	
+	MAPVOTE:AddMap{
+		name = "pb_cubic",
+		label = "Cubic"
+	}
+	
+	MAPVOTE:AddMap{
+		name = "pb_levels",
+		label = "Levels"
+	}
+	
+	--Melon Tank
+	MAPVOTE:AddMap{
+		name = "mt_lego_arena_b2p",
+		label = "Lego Arena"
+	}
+	
+	--Labyrinth
+	MAPVOTE:AddMap{
+		name = "lab_theseus_v2",
+		label = "Theseus v2",
+		gamemodes = {
+			"labyrinth"
+		}
+	}
+	
 /*
 	End of map list
 */

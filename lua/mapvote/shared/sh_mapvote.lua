@@ -27,9 +27,9 @@ MAPVOTE.GamemodeVoteTime = 30
 
 --Gamemodes that are available to vote for (gamemode folder names):
 MAPVOTE.VoteGamemodes = {
-	"terrortown",
 	"sandbox",
-	"stalker2"
+	"darkrp",
+	"terrortown"
 }
 
 
@@ -68,28 +68,28 @@ MAPVOTE.PitchSound = true
 --KMapVoteFlatFS
 --KMapVoteTransparentFS
 --KMapVotePulseFS
-MAPVOTE.DermaSkin = "KMapVotePulseFS"
+MAPVOTE.DermaSkin = "KMapVoteNeoGaming"
 
 --Allow players to close the vote window during a vote. This has to be supported by the skin(currently the fullscreen skin supports this).
 MAPVOTE.AllowClose = true
 
 --Enable or Disable the logo.
-MAPVOTE.UseLogo = false
+MAPVOTE.UseLogo = true
 
 --You should rename your logo and update this path to prevent
 --players from other players with this addon to show the wrong logo
 --This is the path to the logo without the materials/ prefix.
-MAPVOTE.LogoPath = "VGUI/your_logo.png"
+MAPVOTE.LogoPath = "VGUI/neoglogo.png"
 
 --If you dont understand or cant figure out the settings below, send me your logo as pm on coderhire, 
 --and how you image it to look and i'll set it up for you!
 
 --Set this to logo width/logo height, it's used for the auto resizing of the logo on fullscreen skins
-MAPVOTE.LogoAspect = 256 / 1900
+MAPVOTE.LogoAspect = 202 / 376
 
 --Set this to the minimun/maximum width you want your logo to have. Height is automatically determined
-MAPVOTE.LogoMinWidth = 128 
-MAPVOTE.LogoMaxWidth = 1200
+MAPVOTE.LogoMinWidth = 256 
+MAPVOTE.LogoMaxWidth = 376
 MAPVOTE.LogoScreenScale = 1/6 --Use 1/6 of the screen size for the logo size
 
 --Set to true to show a timer that shows the time left to vote
@@ -103,7 +103,7 @@ MAPVOTE.ShowTimer = true
 -- inElastic, outElastic, inOutElastic, outInElastic, inBack, outBack, inOutBack, outInBack, 
 -- outBounce, inBounce, inOutBounce, outInBounce
 -- Default: outBounce
-MAPVOTE.AnimationStyle = "inOutQuad"
+MAPVOTE.AnimationStyle = "outBounce"
 
 /*
 	RTV - Rock the Vote Settings
@@ -131,7 +131,7 @@ MAPVOTE.RTVPreVoteTime = 60
 MAPVOTE.RTVUserVotePower = false
 
 --Make the map change after the current ttt round is finished
---Requires MAPVOTE.UseTerrortown = true
+--Requires MAPVOTE.UseTerrortown = true and/or MAPVOTE.Murder.Enable = true
 MAPVOTE.RTVWaitUntilTTTRoundEnd = true
 
 
@@ -151,7 +151,7 @@ MAPVOTE.MapCooldown = 3
 --Automatically start a vote after the specified amount of time(in minutes), set to false to disable
 --Example: MAPVOTE.TimeBetweenVotes = 10
 --This would start a Vote every 10 minutes
-MAPVOTE.TimeBetweenVotes = false
+MAPVOTE.TimeBetweenVotes = 2
 
 --Amount of time(in seconds) that the winning map/gamemode flashes after 
 MAPVOTE.PostVoteTime = 3
@@ -176,6 +176,9 @@ MAPVOTE.EnableRatings = true
 --Show the next vote timer on the top of the screen(HUD)
 MAPVOTE.ShowHUDHint = true
 
+--Make the vote timer move to the center 10, 5 and one minute before the vote
+MAPVOTE.EnableHUDHintWarnings = true
+
 
 /*
 	Gamemode Integration Settings
@@ -196,6 +199,13 @@ MAPVOTE.SetFrettaReplacement = true
 MAPVOTE.CNJailbreakIntegrationEnabled = true
 
 /*
+	NODE: Below are settings for gamemdoes that don't have a round count system built in.
+	KMapVote then uses a custom one, you can fine tune the rounds there
+*/
+--Announce rounds left until a vote starts in chat after each round
+MAPVOTE.AnnounceRoundsInChat = true 
+
+/*
 	Murder Settings
 */
 MAPVOTE.Murder = {}
@@ -203,11 +213,42 @@ MAPVOTE.Murder = {}
 --Enable Murder integration
 MAPVOTE.Murder.Enable = true
 
---Announce rounds left until a vote starts in chat after each round
-MAPVOTE.Murder.AnnounceInChat = true 
-
 --Amount of rounds to play on each map until the vote starts
 MAPVOTE.Murder.MaxRounds = 5
+
+/*
+	Labyrinth Settings
+*/
+MAPVOTE.Labyrinth = { }
+
+--Enable Labyrinth integration
+MAPVOTE.Labyrinth.Enable = true
+
+--Amount of rounds to play on each map until the vote starts
+MAPVOTE.Labyrinth.MaxRounds = 5
+
+/*
+	Melonbomber Settings
+*/
+MAPVOTE.Melonbomber = { }
+
+--Enable Melonbomber integration
+MAPVOTE.Melonbomber.Enable = true
+
+--Amount of rounds to play on each map until the vote starts
+MAPVOTE.Melonbomber.MaxRounds = 5
+
+/*
+	Melontank Settings
+*/
+MAPVOTE.Melontank = { }
+
+--Enable Melontank integration
+MAPVOTE.Melontank.Enable = true
+
+--Amount of rounds to play on each map until the vote starts
+MAPVOTE.Melontank.MaxRounds = 5
+
 
 /*
 	Admin Settings and vote powers

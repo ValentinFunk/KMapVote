@@ -12,6 +12,14 @@ net.Receive( "VotemapState", function( len )
 	end
 end )
 
+function MAPVOTE:GetState( )
+	return STATE
+end
+
+function MAPVOTE:GetStatevars( )
+	return STATEVARS
+end
+
 local function openVotingFrame( mapList, endTime )
 	local mainPanel = vgui.Create( "MapVoteFrame" )
 	mainPanel:SetMapList( mapList, endTime )
