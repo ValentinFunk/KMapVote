@@ -20,11 +20,11 @@ local function animSlide( self, anim, delta, data )
 	self:SetPos( ScrW( ) / 2 - self:GetWide( ) / 2, Lerp( delta, data.From, data.To ) )
 end
 
-HudPanel = HudPanel or nil
+HudPanel = IsValid( HudPanel ) and HudPanel:Remove( )
 local function createHud( )
 	HudPanel = vgui.Create( "DPanel" )
 	local pnl = HudPanel
-	pnl:SetSize( 300, 30 )
+	pnl:SetSize( 250, 20 )
 	pnl:SetSkin( MAPVOTE.DermaSkin )
 	derma.SkinHook( "Layout", "HudPanel", pnl )
 	function pnl:Paint( w, h )
@@ -68,8 +68,10 @@ hook.Add( "Think", "kmv_showtimer", function( )
 	if not MAPVOTE then return end
 	if not IsValid( HudPanel ) then return end
 	if MAPVOTE:GetState( ) != "STATE_NOVOTE" then
-		if HudPanel.centered then
-			HudPanel.animSlide:SetPos( ScrW( ) / 2 - pnl:GetWide( ) / 2, ScrH( ) - pnl:GetTall( ) )
+		if IsValid( HudPanel ) then
+			local x, y = HudPanel:GetPos( )
+			HudPanel.animSlide:Start( 0.5, { From = y, To = ScrH( ) - HudPanel:GetTall( ) } )
+			HudPanel.centered = false
 		end
 		return
 	end
@@ -85,7 +87,7 @@ hook.Add( "Think", "kmv_showtimer", function( )
 	if formatTbl.m > 0 then
 		text = Format( "A mapvote will start in %02i:%02i minutes", formatTbl.m, formatTbl.s )
 	else
-		text = Format( "A mapvote will start in %02i seconds", formatTbl.s )
+		text = Format( "A mapvote will start in %i seconds", formatTbl.s )
 	end
 	
 	HudPanel.label:SetText( text )

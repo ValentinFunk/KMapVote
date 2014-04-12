@@ -84,7 +84,7 @@ function STATES.STATE_NOVOTE:Init( )
 		STATES.RockTheVote.nextRtvValid = CurTime( ) + MAPVOTE.RTVInitialCooldown * 60
 	end
 	
-	if MAPVOTE.TimeBetweenVotes and not self.nextVote then
+	if MAPVOTE.TimeBetweenVotes then
 		self.nextVote = CurTime( ) + MAPVOTE.TimeBetweenVotes * 60
 		self.netStateVars = { nextVote = self.nextVote }
 	end
