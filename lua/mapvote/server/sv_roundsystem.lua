@@ -2,7 +2,7 @@ MAPVOTE.OwnRoundCounter = 0
 
 function MAPVOTE.CustomRoundEnded( gmConfigName )
 	MAPVOTE.OwnRoundCounter = MAPVOTE.OwnRoundCounter + 1
-	local roundsLeft = MAPVOTE[gmConfigName].RoundsToPlay - MAPVOTE.OwnRoundCounter
+	local roundsLeft = MAPVOTE[gmConfigName].MaxRounds - MAPVOTE.OwnRoundCounter
 	if roundsLeft > 1 then
 		for k, v in pairs( player.GetAll( ) ) do
 			v:PrintMessage( HUD_PRINTTALK, Format( "[KMapVote] The round ended. %i rounds left until the vote starts.", roundsLeft ) )
@@ -13,7 +13,7 @@ function MAPVOTE.CustomRoundEnded( gmConfigName )
 		end
 	end
 	
-	if MAPVOTE.OwnRoundCounter >= MAPVOTE[gmConfigName].RoundsToPlay then
+	if MAPVOTE.OwnRoundCounter >= MAPVOTE[gmConfigName].MaxRounds then
 		MAPVOTE:BeginVote( )
 	end
 	
