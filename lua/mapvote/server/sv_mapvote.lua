@@ -376,6 +376,10 @@ function STATES.Vote:Init( )
 	self.maps = {}
 	table.shuffle( MAPVOTE.maps )
 	
+	if engine.ActiveGamemode( ) == "terrortown" then
+		timer.Stop( "end2prep" )
+	end
+	
 	local gmTable 
 	if MAPVOTE.VoteForGamemode and self.wonGm then
 		for k, v in pairs( engine.GetGamemodes( ) ) do
@@ -650,7 +654,7 @@ function STATES.VoteFinished:Think( )
 		self.changingMapAfterSave = true
 		
 		local changed = false
-		function doChangeMap( )	
+		local function doChangeMap( )	
 			changed = true
 			if self.wonMap == game.GetMap() then
 				--Map Extension
@@ -676,6 +680,10 @@ function STATES.VoteFinished:Think( )
 						GAMEMODE:InitCvars()
 					end
 					GAMEMODE.extendedStartTime = CurTime( )
+				end
+				
+				if engine.ActiveGamemode( ) == "terrortown" then
+					PrepareRound()
 				end
 			else
 				if MAPVOTE.VoteForGamemode and STATES.Vote.wonGm then
