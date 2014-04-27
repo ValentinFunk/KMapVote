@@ -32,6 +32,17 @@ MAPVOTE.VoteGamemodes = {
 	"terrortown"
 }
 
+--Gamemodes for which after a successful RTV the vote will be delayed until the round ends
+--Check the manual for information on how to make gamemodes support this feature
+MAPVOTE.RTVWaitForRoundEndGamemodes = {
+	"terrortown",
+	"murder",
+	"labyrinth",
+	"melonbomber",
+	"melontank",
+	"zombiesurvival"
+} 
+
 
 /*
 	GUI Configuration
@@ -68,7 +79,7 @@ MAPVOTE.PitchSound = true
 --KMapVoteFlatFS
 --KMapVoteTransparentFS
 --KMapVotePulseFS
-MAPVOTE.DermaSkin = "KMapVoteNeoGaming"
+MAPVOTE.DermaSkin = "KMapVoteDefault"
 
 --Allow players to close the vote window during a vote. This has to be supported by the skin(currently the fullscreen skin supports this).
 MAPVOTE.AllowClose = true
@@ -79,18 +90,18 @@ MAPVOTE.UseLogo = true
 --You should rename your logo and update this path to prevent
 --players from other players with this addon to show the wrong logo
 --This is the path to the logo without the materials/ prefix.
-MAPVOTE.LogoPath = "VGUI/neoglogo.png"
+MAPVOTE.LogoPath = "VGUI/yourlogo.png"
 
 --If you dont understand or cant figure out the settings below, send me your logo as pm on coderhire, 
 --and how you image it to look and i'll set it up for you!
 
---Set this to logo width/logo height, it's used for the auto resizing of the logo on fullscreen skins
-MAPVOTE.LogoAspect = 202 / 376
+--Set this to logo height/logo width, it's used for the auto resizing of the logo on fullscreen skins
+MAPVOTE.LogoAspect = 320 / 1024
 
 --Set this to the minimun/maximum width you want your logo to have. Height is automatically determined
-MAPVOTE.LogoMinWidth = 256 
-MAPVOTE.LogoMaxWidth = 376
-MAPVOTE.LogoScreenScale = 1/6 --Use 1/6 of the screen size for the logo size
+MAPVOTE.LogoMinWidth = 512 
+MAPVOTE.LogoMaxWidth = 1024
+MAPVOTE.LogoScreenScale = 1/4 --Use 1/6 of the screen size for the logo size
 
 --Set to true to show a timer that shows the time left to vote
 MAPVOTE.ShowTimer = true
@@ -130,11 +141,6 @@ MAPVOTE.RTVPreVoteTime = 60
 --This means that if a player with votepower 2 says !rtv their vote counts as two
 MAPVOTE.RTVUserVotePower = false
 
---Make the map change after the current ttt round is finished
---Requires MAPVOTE.UseTerrortown = true and/or MAPVOTE.Murder.Enable = true
-MAPVOTE.RTVWaitUntilTTTRoundEnd = true
-
-
 /*
 	General Settings
 */
@@ -151,7 +157,7 @@ MAPVOTE.MapCooldown = 3
 --Automatically start a vote after the specified amount of time(in minutes), set to false to disable
 --Example: MAPVOTE.TimeBetweenVotes = 10
 --This would start a Vote every 10 minutes
-MAPVOTE.TimeBetweenVotes = 2
+MAPVOTE.TimeBetweenVotes = false
 
 --Amount of time(in seconds) that the winning map/gamemode flashes after 
 MAPVOTE.PostVoteTime = 3
@@ -215,6 +221,18 @@ MAPVOTE.Murder.Enable = true
 
 --Amount of rounds to play on each map until the vote starts
 MAPVOTE.Murder.MaxRounds = 5
+
+/*
+	Zombie Survival Settings
+*/
+MAPVOTE.ZombieSurvival = {}
+
+--Enable Murder integration
+MAPVOTE.ZombieSurvival.Enable = true
+
+--Amount of rounds to play on each map until the vote starts
+MAPVOTE.ZombieSurvival.MaxRounds = 5
+
 
 /*
 	Labyrinth Settings

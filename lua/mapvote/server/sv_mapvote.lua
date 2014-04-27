@@ -132,9 +132,7 @@ function STATES.RockTheVote:Think( )
 		end
 	end
 	if numVotes >= math.Round( #player.GetAll( ) * MAPVOTE.RTVRequiredFraction ) then
-		if MAPVOTE.RTVWaitUntilTTTRoundEnd 
-		   and ( engine.ActiveGamemode( ) == "terrortown" or engine.ActiveGamemode( ) == "murder" ) 
-		then
+		if table.HasValue( MAPVOTE.RTVWaitForRoundEndGamemodes ) then
 			setState( "WaitForRoundEnd" )
 		else
 			if MAPVOTE.VoteForGamemode then
@@ -397,6 +395,30 @@ function STATES.Vote:Init( )
 	
 	self.wonGm = self.wonGm or engine.ActiveGamemode()
 	
+	local mapsInCooldown = {}
+	if MAPVOTE.MapCooldown then
+		if not DATABASES or not DATABASES.KMapVote then
+			for k, v in pairs( player.GetAll( ) ) do
+				local errors = table.concat( mapErrors, "\n" ) 
+				if v:IsAdmin( ) then
+					BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote|AdminOnly] There has been an error fetching map information, please check your database configuration and the server console for errors. Contact Kamshak if this persists." )
+				end
+			end
+		else
+			DATABASES.KMapVote.DoQuery( 
+				"SELECT * FROM kmapvote_mapinfo ORDER BY createdAt DESC LIMIT " ..  MAPVOTE.MapCooldown,
+				true --blocking
+			)
+			:Then( function( rows )
+				rows = rows or {}
+				
+				for k, row in pairs( rows ) do
+					table.insert( mapsInCooldown, row.mapname )
+				end
+			end )
+		end
+	end
+	
 	local mapErrors = {}
 	for _, map in pairs( MAPVOTE.maps ) do
 		if #self.maps >= MAPVOTE.MapsPerVote then
@@ -416,6 +438,10 @@ function STATES.Vote:Init( )
 		end
 		
 		if not isMapGoodForGamemode( map, gmTable ) then
+			continue
+		end
+		
+		if table.HasValue( mapsInCooldown, map.name ) then
 			continue
 		end
 		
@@ -444,36 +470,6 @@ function STATES.Vote:Init( )
 			if v:IsAdmin( ) then
 				BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote|AdminOnly] Errors have been detected in your config:\n" .. errors )
 			end
-		end
-	end
-	
-	if MAPVOTE.MapCooldown then
-		if not DATABASES or not DATABASES.KMapVote then
-			for k, v in pairs( player.GetAll( ) ) do
-				local errors = table.concat( mapErrors, "\n" ) 
-				if v:IsAdmin( ) then
-					BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote|AdminOnly] There has been an error fetching ratings, please check your database configuration and the server console for errors. Contact Kamshak if this persists." )
-				end
-			end
-		else
-			DATABASES.KMapVote.DoQuery( 
-				"SELECT * FROM kmapvote_mapinfo ORDER BY createdAt DESC LIMIT " ..  MAPVOTE.MapCooldown,
-				true --blocking
-			)
-			:Then( function( rows )
-				rows = rows or {}
-				local mapsNotAllowed = {}
-				for k, row in pairs( rows ) do
-					table.insert( mapsNotAllowed, row.mapname )
-				end
-				
-				for k, mapTbl in pairs( self.maps ) do
-					if table.HasValue( mapsNotAllowed, mapTbl.name ) then
-						KLogf( 5, "Map %s has been played too recently, removing it! (gm is %s)", mapTbl.name, gmTable.name )
-						self.maps[k] = nil
-					end
-				end
-			end )
 		end
 	end
 	
@@ -508,6 +504,8 @@ function STATES.Vote:Init( )
 		setState( "STATE_NOVOTE" )
 		return
 	end
+	
+	hook.Call( "KMapVote_MapVoteStarted" )
 	
 	--Send list to client
 	self.netStateVars = { 

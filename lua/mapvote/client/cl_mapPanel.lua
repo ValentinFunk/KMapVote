@@ -141,7 +141,7 @@ function PANEL:SetMap( map )
 	self.map = map
 	self.icon.materials = {}
 	if MAPVOTE.UseCDN then
-		local url = Format( "http://kamshak.com/mapicons/%s.png", map.name )
+		local url = Format( "http://d3ivyvnscxnz45.cloudfront.net/mapicons/%s.png", map.name )
 		urltex.GetMaterialFromURL( url,
 			function( mat, tex )
 				local tex = urltex.Cache[url]
