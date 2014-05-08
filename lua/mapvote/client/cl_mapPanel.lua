@@ -172,14 +172,13 @@ function PANEL:SetMap( map )
 		local mat = CreateMaterial("kmapv_urltex_" .. util.CRC(url .. SysTime()), "UnlitGeneric")
 		mat:SetTexture("$basetexture", tex)
 		table.insert( self.materials, mat )
-		print( "Got ", mat, tex )
 	end
 	
 	timer.Simple( 0.1, function( )
 		if not MAPVOTE.IconCounts[map.name] then return end
 		for i = 1, MAPVOTE.IconCounts[map.name] - 1 do
 			if MAPVOTE.UseCDN then
-				local url = Format( "http://kamshak.com/mapicons/%s(%i).png", map.name, i )
+				local url = Format( "http://d3ivyvnscxnz45.cloudfront.net/mapicons/%s(%i).png", map.name, i )
 				urltex.GetMaterialFromURL( url,
 					function( mat, tex ) 
 						if self.icon then self.icon:OnIconReceived( mat, tex, url ) end

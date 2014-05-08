@@ -79,7 +79,7 @@ MAPVOTE.PitchSound = true
 --KMapVoteFlatFS
 --KMapVoteTransparentFS
 --KMapVotePulseFS
-MAPVOTE.DermaSkin = "KMapVoteDefault"
+MAPVOTE.DermaSkin = "KMapVoteVRS"
 
 --Allow players to close the vote window during a vote. This has to be supported by the skin(currently the fullscreen skin supports this).
 MAPVOTE.AllowClose = true
@@ -90,18 +90,18 @@ MAPVOTE.UseLogo = true
 --You should rename your logo and update this path to prevent
 --players from other players with this addon to show the wrong logo
 --This is the path to the logo without the materials/ prefix.
-MAPVOTE.LogoPath = "VGUI/yourlogo.png"
+MAPVOTE.LogoPath = "VGUI/vrslogo.png"
 
 --If you dont understand or cant figure out the settings below, send me your logo as pm on coderhire, 
 --and how you image it to look and i'll set it up for you!
 
 --Set this to logo height/logo width, it's used for the auto resizing of the logo on fullscreen skins
-MAPVOTE.LogoAspect = 320 / 1024
+MAPVOTE.LogoAspect = 333 / 416
 
 --Set this to the minimun/maximum width you want your logo to have. Height is automatically determined
-MAPVOTE.LogoMinWidth = 512 
-MAPVOTE.LogoMaxWidth = 1024
-MAPVOTE.LogoScreenScale = 1/4 --Use 1/6 of the screen size for the logo size
+MAPVOTE.LogoMinWidth = 180
+MAPVOTE.LogoMaxWidth = 333
+MAPVOTE.LogoScreenScale = 1/5 --Use 1/5 of the screen size for the logo size
 
 --Set to true to show a timer that shows the time left to vote
 MAPVOTE.ShowTimer = true

@@ -5,7 +5,7 @@ function PANEL:Init( )
 	self.operation = "slidein" 
 	self.fadedOut = true
 	self:SetTall( 0 )
-	self.targetHeight = 400
+	self.targetHeight = 800
 end
 
 local origSetSize

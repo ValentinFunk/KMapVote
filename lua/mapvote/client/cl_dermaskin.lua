@@ -54,8 +54,11 @@ function SKIN:LayoutGMVoteFrame( panel )
 end
 
 function SKIN:LayoutMapVoteFrame( panel )
+	panel:SetSize( 800, 600 )
 	panel:Center( )
 	function panel:PerformLayout( )
+		timer.Simple( 0.1, function( ) if IsValid( self ) then self:Center( ) end end )
+		if self.fading then return end
 		local y = 0
 		for k, v in pairs( self:GetChildren( ) ) do
 			local x, _y = v:GetPos( )

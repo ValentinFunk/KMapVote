@@ -132,7 +132,7 @@ function STATES.RockTheVote:Think( )
 		end
 	end
 	if numVotes >= math.Round( #player.GetAll( ) * MAPVOTE.RTVRequiredFraction ) then
-		if table.HasValue( MAPVOTE.RTVWaitForRoundEndGamemodes ) then
+		if table.HasValue( MAPVOTE.RTVWaitForRoundEndGamemodes, engine.ActiveGamemode( ) ) then
 			setState( "WaitForRoundEnd" )
 		else
 			if MAPVOTE.VoteForGamemode then
@@ -399,7 +399,6 @@ function STATES.Vote:Init( )
 	if MAPVOTE.MapCooldown then
 		if not DATABASES or not DATABASES.KMapVote then
 			for k, v in pairs( player.GetAll( ) ) do
-				local errors = table.concat( mapErrors, "\n" ) 
 				if v:IsAdmin( ) then
 					BaseController.startView( nil, "MapvoteView", "displayError", v, "[KMapVote|AdminOnly] There has been an error fetching map information, please check your database configuration and the server console for errors. Contact Kamshak if this persists." )
 				end

@@ -4,10 +4,10 @@
 */
 
 --If user has PAC installed, use the PAC urltex(might be more up2date)
-if pac and pac.urltex then
+/*if pac and pac.urltex then
 	_G.urltex = pac.urltex
 	return
-end
+end*/
 
 local urltex = urltex or {}
 
