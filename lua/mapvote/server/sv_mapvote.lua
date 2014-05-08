@@ -87,6 +87,8 @@ function STATES.STATE_NOVOTE:Init( )
 	if MAPVOTE.TimeBetweenVotes then
 		self.nextVote = CurTime( ) + MAPVOTE.TimeBetweenVotes * 60
 		self.netStateVars = { nextVote = self.nextVote }
+	else
+		self.netStateVars = { }
 	end
 end
 
@@ -444,7 +446,7 @@ function STATES.Vote:Init( )
 			continue
 		end
 		
-		if not file.Exists( "maps/" .. map.name .. ".bsp", "GAME" ) then
+		if MAPVOTE.CheckMaps and not file.Exists( "maps/" .. map.name .. ".bsp", "GAME" ) then
 			table.insert( mapErrors, map.name .. ".bsp could not be found on the server and was not added to the vote!" )
 			continue
 		end
