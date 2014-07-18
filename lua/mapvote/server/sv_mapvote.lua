@@ -369,6 +369,8 @@ end
 
 STATES.Vote = {}
 function STATES.Vote:Init( )
+	self.ExtendCounter = self.ExtendCounter or 0
+	
 	self.playerVotes = {} --ply = mapname
 	self.voteTimeout = CurTime( ) + MAPVOTE.VoteTime
 	
@@ -421,6 +423,11 @@ function STATES.Vote:Init( )
 	end
 	
 	local mapErrors = {}
+	local maxMaps = MAPVOTE.MapsPerVote
+	if MAPVOTE.ExtensionLimit and self.ExtendCounter < MAPVOTE.ExtensionLimit then
+		maxMaps = maxMaps + 1 --Allow one more map than configured since extension panel is gone
+	end
+	
 	for _, map in pairs( MAPVOTE.maps ) do
 		if #self.maps >= MAPVOTE.MapsPerVote then
 			break
@@ -461,7 +468,9 @@ function STATES.Vote:Init( )
 			end
 		end
 		if map and isMapGoodForGamemode( map, gmTable ) then
-			table.insert( self.maps, map )
+			if MAPVOTE.ExtensionLimit and self.ExtendCounter < MAPVOTE.ExtensionLimit then
+				table.insert( self.maps, map )
+			end
 		end
 	end
 	
@@ -516,6 +525,10 @@ function STATES.Vote:Init( )
 	
 	self.netStateVars["wonGm"] = self.wonGm or nil
 end
+
+hook.Add( "KMapVoteMapExtension", "LimitExtension", function( )
+	STATES.Vote.ExtendCounter = STATES.Vote.ExtendCounter + 1
+end )
 
 function STATES.Vote:Think( )
 	if CurTime( ) >= self.voteTimeout or #self.maps == 1 then
