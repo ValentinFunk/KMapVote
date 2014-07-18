@@ -185,6 +185,9 @@ MAPVOTE.ShowHUDHint = true
 --Make the vote timer move to the center 10, 5 and one minute before the vote
 MAPVOTE.EnableHUDHintWarnings = true
 
+--Limit the times that a map can be extended
+MAPVOTE.ExtensionLimit = 1 --only allow one map extension
+
 
 /*
 	Gamemode Integration Settings
