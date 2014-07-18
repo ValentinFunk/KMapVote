@@ -32,6 +32,16 @@ if engine.ActiveGamemode( ) == "melontank" and MAPVOTE.Melontank.Enable then
 	end )
 end
 
+if engine.ActiveGamemode( ) == "stopitslender" and MAPVOTE.StopItSlender.Enable then
+	hook.Add( "Initialize", "StopItSlenderHk", function( )
+		local old = GAMEMODE.RestartRound
+		function GAMEMODE.RestartRound( self )
+			old( self )
+			MAPVOTE.CustomRoundEnded( "StopItSlender" )
+		end
+	end )
+end
+
 /*
 --Pedobearescape 2
 if engine.ActiveGamemode( ) == "pedobearescape2" then
