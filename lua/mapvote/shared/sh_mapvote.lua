@@ -79,18 +79,18 @@ MAPVOTE.PitchSound = true
 --KMapVoteFlatFS
 --KMapVoteTransparentFS
 --KMapVotePulseFS
-MAPVOTE.DermaSkin = "KMapVoteVRS"
+MAPVOTE.DermaSkin = "KMapVoteDefault"
 
 --Allow players to close the vote window during a vote. This has to be supported by the skin(currently the fullscreen skin supports this).
 MAPVOTE.AllowClose = true
 
 --Enable or Disable the logo.
-MAPVOTE.UseLogo = true
+MAPVOTE.UseLogo = false
 
 --You should rename your logo and update this path to prevent
 --players from other players with this addon to show the wrong logo
 --This is the path to the logo without the materials/ prefix.
-MAPVOTE.LogoPath = "VGUI/vrslogo.png"
+MAPVOTE.LogoPath = "VGUI/yourlogo.png"
 
 --If you dont understand or cant figure out the settings below, send me your logo as pm on coderhire, 
 --and how you image it to look and i'll set it up for you!
