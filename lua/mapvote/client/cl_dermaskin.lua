@@ -54,20 +54,12 @@ function SKIN:LayoutGMVoteFrame( panel )
 end
 
 function SKIN:LayoutMapVoteFrame( panel )
-	panel:SetSize( 800, 600 )
-	panel:Center( )
-	function panel:PerformLayout( )
-		timer.Simple( 0.1, function( ) if IsValid( self ) then self:Center( ) end end )
-		if self.fading then return end
-		local y = 0
-		for k, v in pairs( self:GetChildren( ) ) do
-			local x, _y = v:GetPos( )
-			_y = _y + v:GetTall( )
-			if _y > y then
-				y = _y
-			end
-		end
-		self:SetTall( y + 10 )
+	panel:SetSize( 800, 630 )
+	panel.targetHeight = 630
+	panel.shouldCenter = true
+	
+	if MAPVOTE.UseLogo then 
+		panel.targetHeight = panel.targetHeight + 200
 	end
 	
 	if MAPVOTE.AllowClose then

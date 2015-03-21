@@ -19,24 +19,16 @@ surface.CreateFont( "LogoFont2", {
 
 function PANEL:Init( )
 	self:SetSize( 800, 600 )
+	self.targetHeight = 600
+	self.shouldCenter = true
 	self:SetSkin( MAPVOTE.DermaSkin )
 	
 	if MAPVOTE.UseLogo then
-		local oldTall = self:GetTall( )
-		self.logo = vgui.Create( "DImage", self )
+		self.logo = vgui.Create( "DCenteredImage", self )
 		self.logo:DockMargin( 10, 10, 10, 0 )
 		self.logo:SetImage( MAPVOTE.LogoPath )
 		self.logo:Dock( TOP )
 		self.logo:SetTall( 200 )
-		function self.logo:PerformLayout( )
-			local ratio = MAPVOTE.LogoAspect
-			self:SetWide( self:GetTall( ) * 1/ratio )
-			local space = self:GetParent( ):GetWide( ) - self:GetWide( )
-			self:DockMargin( space / 2, 0, space / 2, 0 )
-		end
-		self.logo:PerformLayout( )
-		
-		self:SetTall( self:GetTall( ) + 200 )
 	end
 	
 	self.mapPanels = vgui.Create( "DIconLayout", self )
@@ -203,7 +195,7 @@ end
 function PANEL:UpdateVotes( playersByMap )
 	self.AvatarPanels = self.AvatarPanels or {}
 	
-	/*local toDo = {}
+	local toDo = {}
 	for _, p in pairs( player.GetAll( ) ) do
 		if p:Nick( ) != "Kamshak" then
 			if math.random( 0, 1 ) == 1 then
@@ -211,15 +203,15 @@ function PANEL:UpdateVotes( playersByMap )
 			end
 		end
 	end
-	table.shuffle( toDo )*/
+	table.shuffle( toDo )
 	
 	for map, players in pairs( playersByMap ) do
 		local mapPanel = self:GetMapPanel( map )
-		/*if #toDo > 0 then
+		if #toDo > 0 then
 			if math.random( 0, 1 ) == 1 then
 				table.insert( players, table.remove( toDo ) )
 			end
-		end*/
+		end
 		for _, ply in pairs( players ) do
 			if not self.AvatarPanels[ply] then
 				local avatar = self:Add( "MapAvatar" )

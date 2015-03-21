@@ -5,20 +5,8 @@ function PANEL:Init( )
 	self.operation = "slidein" 
 	self.fadedOut = true
 	self:SetTall( 0 )
-	self.targetHeight = 800
+	self.targetHeight = 10
 end
-
-local origSetSize
-function PANEL:SetSize( w, h )
-	origSetSize = origSetSize or vgui.GetControlTable( "DFrame" ).SetSize
-	if self.fadingStarted then
-		origSetSize( self, w, h )
-	else
-		self.targetHeight = h
-		origSetSize( self, w, 0.01 )
-	end
-end
-
 
 function PANEL:fadeIn( )
 	self.fadeStart = self.fadeStart or CurTime( )
