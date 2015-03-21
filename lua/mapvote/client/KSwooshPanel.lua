@@ -25,12 +25,22 @@ function PANEL:fadeIn( )
 	local timeElapsed = CurTime( ) - self.fadeStart
 	local height = easing.inOutCubic( timeElapsed, 0, self.targetHeight, self.slideInDuration / 2 )
 	self:SetTall( height )
+	if self.shouldCenter then self:Center( ) end
 	if timeElapsed >= self.slideInDuration / 2 then
 		self.fadedOut = false
 		self.fading = false
+		self:OnFadedIn( )
 		return true
 	end
 	return false
+end
+
+function PANEL:OnFadedIn( )
+
+end
+
+function PANEL:OnFadedOut( )
+
 end
 
 function PANEL:fadeOut( )
@@ -39,9 +49,11 @@ function PANEL:fadeOut( )
 	local height = easing.inOutCubic( timeElapsed, self.targetHeight, -self.targetHeight, self.slideInDuration / 2 )
 	height = math.Clamp( height, 0.01, self.targetHeight )
 	self:SetTall( height )
+	if self.shouldCenter then self:Center( ) end
 	if timeElapsed >= self.slideInDuration / 2 then
 		self.fadedOut = true
 		self.fading = false
+		self:OnFadedOut( )
 		return true
 	end
 	return false
