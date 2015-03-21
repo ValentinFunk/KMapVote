@@ -72,7 +72,7 @@ hook.Add( "PlayerInitialSpawn", "MapVoteUpdateState", function( ply )
 		net.Start( "VotemapState" )
 			net.WriteString( STATE )
 			net.WriteTable( state.netStateVars )
-		net.Broadcast( )
+		net.Send( ply )
 	end )
 end )
 
