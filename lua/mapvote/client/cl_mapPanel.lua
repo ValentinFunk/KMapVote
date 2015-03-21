@@ -141,7 +141,7 @@ function PANEL:SetMap( map )
 	self.map = map
 	self.icon.materials = {}
 	if MAPVOTE.UseCDN then
-		local url = Format( "http://d3ivyvnscxnz45.cloudfront.net/mapicons/%s.png", map.name )
+		local url = Format( "http://icons.kamshak.com/%s.png", map.name )
 		urltex.GetMaterialFromURL( url,
 			function( mat, tex )
 				local tex = urltex.Cache[url]
@@ -178,7 +178,7 @@ function PANEL:SetMap( map )
 		if not MAPVOTE.IconCounts[map.name] then return end
 		for i = 1, MAPVOTE.IconCounts[map.name] - 1 do
 			if MAPVOTE.UseCDN then
-				local url = Format( "http://d3ivyvnscxnz45.cloudfront.net/mapicons/%s(%i).png", map.name, i )
+				local url = Format( "http://icons.kamshak.com/%s(%i).png", map.name, i )
 				urltex.GetMaterialFromURL( url,
 					function( mat, tex ) 
 						if self.icon then self.icon:OnIconReceived( mat, tex, url ) end
