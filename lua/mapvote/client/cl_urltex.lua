@@ -10,12 +10,35 @@
 end*/
 
 local urltex = urltex or {}
+local png = LibK.png
 
 urltex.TextureSize = 1024
 urltex.ActivePanels = urltex.ActivePanels or {}
 urltex.MaxConcurrent = 5
 urltex.Queue = urltex.Queue or {}
 urltex.Cache = urltex.Cache or {}
+
+function urltex.DiskCachedGetFromURL(name, w, h, url, callback)
+	local path = png.GetPath( name, w, h )
+	if not file.Exists( "materials/" .. path, "MOD" ) then
+		urltex.GetMaterialFromURL( url, function( mat, tex )
+			local tex = urltex.Cache[url]
+			local matName = "kmapv_urltex_" .. util.CRC(url .. SysTime())
+			local mat = CreateMaterial(matName, "UnlitGeneric")
+			mat:SetTexture("$basetexture", tex)
+			callback( matName )
+			png.Render( name, w, h, function( )
+				cam.Start2D( )
+					surface.SetDrawColor( color_white )
+					surface.SetMaterial( mat )
+					surface.DrawTexturedRectUV( 0, 0, w * 2, h * 2, 0, 0, 1, 1 )
+				cam.End2D()
+			end, function( ) end )
+		end, false, "UnlitGeneric", w )
+	else
+		callback( path )
+	end
+end
 
 concommand.Add("pac_urltex_clear_cache", function()
 	urltex.Cache = {}

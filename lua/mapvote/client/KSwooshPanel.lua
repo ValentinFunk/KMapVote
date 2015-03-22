@@ -12,6 +12,7 @@ function PANEL:fadeIn( )
 	self.fadeStart = self.fadeStart or CurTime( )
 	local timeElapsed = CurTime( ) - self.fadeStart
 	local height = easing.inOutCubic( timeElapsed, 0, self.targetHeight, self.slideInDuration / 2 )
+	height = math.Clamp( height, 0, self.targetHeight )
 	self:SetTall( height )
 	if self.shouldCenter then self:Center( ) end
 	if timeElapsed >= self.slideInDuration / 2 then

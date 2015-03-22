@@ -142,6 +142,11 @@ function PANEL:SetMap( map )
 	self.icon.materials = {}
 	if MAPVOTE.UseCDN then
 		local url = Format( "http://icons.kamshak.com/%s.png", map.name )
+		urltex.DiskCachedGetFromURL( map.name, 128, 128, url, function(path)
+			local mat = Material( path )
+			table.insert( self.icon.materials, mat )
+		end )
+		/*
 		urltex.GetMaterialFromURL( url,
 			function( mat, tex )
 				local tex = urltex.Cache[url]
@@ -157,7 +162,7 @@ function PANEL:SetMap( map )
 			false,
 			"UnlitGeneric",
 			128
-		)
+		)*/
 	else
 		local mat0 = Material( Format( "mapicons/%s.png", map.name ) )
 		table.insert( self.icon.materials, mat0 )
@@ -167,10 +172,7 @@ function PANEL:SetMap( map )
 	self.icon.startedHover = 0
 	self.icon.watchingHover = false
 	
-	function self.icon:OnIconReceived( mat, tex, url )
-		local tex = urltex.Cache[url]
-		local mat = CreateMaterial("kmapv_urltex_" .. util.CRC(url .. SysTime()), "UnlitGeneric")
-		mat:SetTexture("$basetexture", tex)
+	function self.icon:OnIconReceived( mat )
 		table.insert( self.materials, mat )
 	end
 	
@@ -179,14 +181,9 @@ function PANEL:SetMap( map )
 		for i = 1, MAPVOTE.IconCounts[map.name] - 1 do
 			if MAPVOTE.UseCDN then
 				local url = Format( "http://icons.kamshak.com/%s(%i).png", map.name, i )
-				urltex.GetMaterialFromURL( url,
-					function( mat, tex ) 
-						if self.icon then self.icon:OnIconReceived( mat, tex, url ) end
-					end,
-					false,
-					"UnlitGeneric",
-					128
-				)
+				urltex.DiskCachedGetFromURL( map.name .. i, 128, 128, url, function(path)
+					if self.icon then self.icon:OnIconReceived( Material( path ) ) end
+				end )
 			else
 				local mat = Material( Format( "mapicons/%s(%i).png", map.name, i ) )
 				table.insert( self.icon.materials, mat )
