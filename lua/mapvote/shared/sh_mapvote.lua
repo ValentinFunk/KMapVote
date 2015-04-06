@@ -236,6 +236,9 @@ MAPVOTE.ZombieSurvival.Enable = true
 --Amount of rounds to play on each map until the vote starts
 MAPVOTE.ZombieSurvival.MaxRounds = 5
 
+--Amoutn of rounds to play in ZE mode
+MAPVOTE.ZombieSurvival.ZEMaxRounds = 4
+
 
 /*
 	Labyrinth Settings
@@ -292,7 +295,10 @@ MAPVOTE:SetVotePower( "user", 1 )
 MAPVOTE:SetVotePower( "admin", 2 )
 MAPVOTE:SetVotePower( "superadmin", 2 )
 
-
+/*
+	Use to set vote powers for SteamID. 
+*/
+MAPVOTE:SetVotePower( "STEAM_X_XXXXXX", 2 ) 
 	
 	
 /*
@@ -313,6 +319,11 @@ local Player = FindMetaTable( "Player" )
 function Player:GetVotePower( )
 	local ply = self
 	local playerVotePower = 1
+	
+	if MAPVOTE.votePowers[ply:SteamID()] then
+		return MAPVOTE.votePowers[ply:SteamID()]
+	end
+	
 	if MAPVOTE.AdminPlugin == "evolve" then
 		if MAPVOTE.votePowers[ply:EV_GetRank()] then
 			playerVotePower = MAPVOTE.votePowers[ply:EV_GetRank()]
