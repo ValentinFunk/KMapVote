@@ -19,15 +19,15 @@ urltex.Queue = urltex.Queue or {}
 urltex.Cache = urltex.Cache or {}
 
 function urltex.DiskCachedGetFromURL(name, w, h, url, callback)
-	local path = png.GetPath( name, w, h )
+	local path = png.GetPath( name .. "2", w, h )
 	if not file.Exists( "materials/" .. path, "MOD" ) then
 		urltex.GetMaterialFromURL( url, function( mat, tex )
 			local tex = urltex.Cache[url]
 			local matName = "kmapv_urltex_" .. util.CRC(url .. SysTime())
 			local mat = CreateMaterial(matName, "UnlitGeneric")
 			mat:SetTexture("$basetexture", tex)
-			callback( matName )
-			png.Render( name, w, h, function( )
+			callback( mat )
+			png.Render( name .. "2", w, h, function( )
 				cam.Start2D( )
 					surface.SetDrawColor( color_white )
 					surface.SetMaterial( mat )
@@ -36,7 +36,7 @@ function urltex.DiskCachedGetFromURL(name, w, h, url, callback)
 			end, function( ) end )
 		end, false, "UnlitGeneric", w )
 	else
-		callback( path )
+		callback( Material(path, "smooth noclamp") )
 	end
 end
 

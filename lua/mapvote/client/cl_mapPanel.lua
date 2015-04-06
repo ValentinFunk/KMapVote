@@ -142,8 +142,7 @@ function PANEL:SetMap( map )
 	self.icon.materials = {}
 	if MAPVOTE.UseCDN then
 		local url = Format( "http://icons.kamshak.com/%s.png", map.name )
-		urltex.DiskCachedGetFromURL( map.name, 128, 128, url, function(path)
-			local mat = Material( path )
+		urltex.DiskCachedGetFromURL( map.name, 256, 256, url, function(mat)
 			table.insert( self.icon.materials, mat )
 		end )
 		/*
@@ -181,8 +180,8 @@ function PANEL:SetMap( map )
 		for i = 1, MAPVOTE.IconCounts[map.name] - 1 do
 			if MAPVOTE.UseCDN then
 				local url = Format( "http://icons.kamshak.com/%s(%i).png", map.name, i )
-				urltex.DiskCachedGetFromURL( map.name .. i, 128, 128, url, function(path)
-					if self.icon then self.icon:OnIconReceived( Material( path ) ) end
+				urltex.DiskCachedGetFromURL( map.name .. i, 256, 256, url, function(mat)
+					if self.icon then self.icon:OnIconReceived( mat ) end
 				end )
 			else
 				local mat = Material( Format( "mapicons/%s(%i).png", map.name, i ) )
