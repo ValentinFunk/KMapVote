@@ -13,7 +13,12 @@ function MAPVOTE.CustomRoundEnded( gmConfigName )
 		end
 	end
 	
-	if MAPVOTE.OwnRoundCounter >= MAPVOTE[gmConfigName].MaxRounds then
+	local maxRounds = MAPVOTE[gmConfigName].MaxRounds
+	if gmConfigName == "ZombieSurvival" and GAMEMODE.ZombieEscape then
+		maxRounds = MAPVOTE.ZombieSurvival.ZEMaxRounds
+	end
+	
+	if MAPVOTE.OwnRoundCounter >= maxRounds then
 		MAPVOTE:BeginVote( )
 	end
 	
