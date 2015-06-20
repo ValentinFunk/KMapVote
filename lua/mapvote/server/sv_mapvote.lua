@@ -535,6 +535,9 @@ function STATES.Vote:Think( )
 		--Find winner
 		local scoreByMap = {} --map = score
 		for ply, map in pairs( self.playerVotes ) do
+			if not IsValid( ply ) then
+				continue
+			end
 			local playerVotePower = ply:GetVotePower( )
 			scoreByMap[map] = ( scoreByMap[map] or 0 ) + playerVotePower
 		end
