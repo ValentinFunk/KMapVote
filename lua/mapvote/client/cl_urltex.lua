@@ -19,7 +19,7 @@ urltex.Queue = urltex.Queue or {}
 urltex.Cache = urltex.Cache or {}
 
 function urltex.DiskCachedGetFromURL(name, w, h, url, callback)
-	local path = png.GetPath( name .. "2", w, h )
+	local path = png.GetPath( name .. "3", w, h )
 	if not file.Exists( "materials/" .. path, "MOD" ) then
 		urltex.GetMaterialFromURL( url, function( mat, tex )
 			local tex = urltex.Cache[url]
@@ -27,7 +27,7 @@ function urltex.DiskCachedGetFromURL(name, w, h, url, callback)
 			local mat = CreateMaterial(matName, "UnlitGeneric")
 			mat:SetTexture("$basetexture", tex)
 			callback( mat )
-			png.Render( name .. "2", w, h, function( )
+			png.Render( name .. "3", w, h, function( )
 				cam.Start2D( )
 					surface.SetDrawColor( color_white )
 					surface.SetMaterial( mat )

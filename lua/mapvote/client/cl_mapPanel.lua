@@ -141,27 +141,11 @@ function PANEL:SetMap( map )
 	self.map = map
 	self.icon.materials = {}
 	if MAPVOTE.UseCDN then
+		if not MAPVOTE.IconCounts[map.name] then return end
 		local url = Format( "http://icons.kamshak.com/%s.png", map.name )
 		urltex.DiskCachedGetFromURL( map.name, 256, 256, url, function(mat)
 			table.insert( self.icon.materials, mat )
 		end )
-		/*
-		urltex.GetMaterialFromURL( url,
-			function( mat, tex )
-				local tex = urltex.Cache[url]
-				local mat0 = CreateMaterial("kmapv_urltex_" .. util.CRC(url .. SysTime()), "UnlitGeneric")
-				mat0:SetTexture("$basetexture", tex)
-				timer.Simple( 0.1, function( )
-					if IsValid( self.icon ) then
-						table.insert( self.icon.materials, mat0 )
-						self.icon:SetMaterial( mat0 )
-					end
-				end )
-			end,
-			false,
-			"UnlitGeneric",
-			128
-		)*/
 	else
 		local mat0 = Material( Format( "mapicons/%s.png", map.name ) )
 		table.insert( self.icon.materials, mat0 )
