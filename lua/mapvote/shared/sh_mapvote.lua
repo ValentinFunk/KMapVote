@@ -273,6 +273,16 @@ MAPVOTE.Melontank.Enable = true
 --Amount of rounds to play on each map until the vote starts
 MAPVOTE.Melontank.MaxRounds = 5
 
+/*
+	Blackvoid/Deathrun settings
+*/
+MAPVOTE.BVDeathrun = {}
+
+-- Enable Deathrun integration for Blackvoid/Deathrun
+MAPVOTE.BVDeathrun.Enable = true
+
+-- Amount of rounds to play on each map until the vote starts
+MAPVOTE.BVDeathrun.MaxRounds = 5
 
 /*
 	Admin Settings and vote powers
