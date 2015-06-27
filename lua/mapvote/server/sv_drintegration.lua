@@ -15,7 +15,9 @@ end )
 
 hook.Add( "KMapVoteMapExtension", "KMVMAkeSureRoundStarts", function( )
 	timer.Simple( 0.5, function( )
-		GAMEMODE:RoundStatusCheck( )
+		if GAMEMODE.RoundStatusCheck then
+			GAMEMODE:RoundStatusCheck( )
+		end
 	end )
 end )
 
