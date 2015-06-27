@@ -139,18 +139,13 @@ function PANEL:SetMap( map )
 	self.ratingsLayout:setRating( map.ratingAverage or 2 )
 	self.numRatingsLabel:SetText( "(" .. ( map.ratingCount or 1337 ) .. ")" )
 	self.map = map
-	self.icon.materials = {}
-	if MAPVOTE.UseCDN then
-		if not MAPVOTE.IconCounts[map.name] then return end
-		local url = Format( "http://icons.kamshak.com/%s.png", map.name )
-		urltex.DiskCachedGetFromURL( map.name, 256, 256, url, function(mat)
-			table.insert( self.icon.materials, mat )
-		end )
+	if map.name == game.GetMap( ) then
+		self.label:SetText( "Extend map" )
 	else
-		local mat0 = Material( Format( "mapicons/%s.png", map.name ) )
-		table.insert( self.icon.materials, mat0 )
-		self.icon:SetMaterial( mat0 )
+		self.label:SetText( map.label or map.name )
 	end
+	
+	self.icon.materials = {}
 	
 	self.icon.startedHover = 0
 	self.icon.watchingHover = false
@@ -204,10 +199,28 @@ function PANEL:SetMap( map )
 		end
 	end
 	
-	if map.name == game.GetMap( ) then
-		self.label:SetText( "Extend map" )
+	if MAPVOTE.UseCDN then
+		if not MAPVOTE.IconCounts[map.name] then
+			function self.icon:Paint( w, h )
+				surface.SetDrawColor( 80, 80, 80 )
+				surface.DrawRect( 0, 0, w, h )
+			end
+			self.icon.missingInfo = vgui.Create( "DLabel", self.icon )
+			self.icon.missingInfo:Dock( FILL )
+			self.icon.missingInfo:SetColor( Color( 180, 180, 180 ) )
+			self.icon.missingInfo:SetFont( "LibKHeading" )
+			self.icon.missingInfo:SetText( "No Icon" )
+			self.icon.missingInfo:SetContentAlignment( 5 )
+		else
+			local url = Format( "http://icons.kamshak.com/%s.png", map.name )
+			urltex.DiskCachedGetFromURL( map.name, 256, 256, url, function(mat)
+				table.insert( self.icon.materials, mat )
+			end )
+		end
 	else
-		self.label:SetText( map.label or map.name )
+		local mat0 = Material( Format( "mapicons/%s.png", map.name ) )
+		table.insert( self.icon.materials, mat0 )
+		self.icon:SetMaterial( mat0 )
 	end
 end
 
