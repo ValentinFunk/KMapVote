@@ -901,3 +901,22 @@ end
 function MAPVOTE:GetStateTable( )
 	return STATES[STATE]
 end
+
+concommand.Add( "list_maps", function(ply, cmd, args) 
+	if IsValid(ply) then 
+		return
+	end
+	
+	local files = file.Find("maps/*.bsp", "GAME")
+	local genCfg = ""
+	for k, v in pairs(files) do
+		genCfg = genCfg .. "\r\n" .. Format(
+[[
+	MAPVOTE:AddMap{
+		name = "%s"
+	}
+]], string.sub(v, 1, #v -4))
+	end
+
+	file.Write("gencfg.txt", genCfg)
+end )
