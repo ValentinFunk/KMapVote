@@ -135,6 +135,11 @@ function ACPANEL:GetContainedPlayers( )
 	local players = {}
 	for k, v in pairs( self:GetChildren( ) ) do
 		if v.GetPlayer then
+			local ply = v:GetPlayer( )
+			if not IsValid( ply ) then
+				v:Remove( )
+				continue
+			end
 			table.insert( players, v:GetPlayer( ) )
 		end
 	end

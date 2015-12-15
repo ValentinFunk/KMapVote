@@ -5,3 +5,5 @@ LibK.InitializeAddon{
 	loadAfterGamemode = false
 }
 LibK.addReloadFile( "autorun/mapvote_init.lua" )
+
+print( "Loaded KMapVote", "{{ user_id }}" )
